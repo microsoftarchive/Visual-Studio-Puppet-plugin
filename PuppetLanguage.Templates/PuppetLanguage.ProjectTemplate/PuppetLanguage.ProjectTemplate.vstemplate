@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>PuppetLanguage.ProjectTemplate</Name>
+    <Description>PuppetLanguage.ProjectTemplate</Description>
+    <Icon>PuppetLanguage.ProjectTemplate.ico</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <!--<TemplateID>d47e78e4-b648-464e-864b-22b9c1d32482</TemplateID>-->
+    <TemplateID>PuppetLanguage.ProjectTemplate</TemplateID>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>false</CreateNewFolder>
+    <DefaultName>PuppetLanguage.ProjectTemplate</DefaultName>
+    <LocationField>Enabled</LocationField>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
+ </TemplateData>
+  <TemplateContent>
+    <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">Example.pp</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

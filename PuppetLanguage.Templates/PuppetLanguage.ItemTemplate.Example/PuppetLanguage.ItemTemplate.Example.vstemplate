@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>PuppetLanguage.ItemTemplate.Example</Name>
+    <Description>PuppetLanguage.ItemTemplate.Example</Description>
+    <Icon>PuppetLanguage.ItemTemplate.Example.ico</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>PuppetLanguage</ProjectSubType>
+    <CreateNewFolder>true</CreateNewFolder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <!--<TemplateID>cded7ab9-9bc2-4700-9adb-4d417bb2c825</TemplateID>-->
+    <TemplateID>PuppetLanguage.ItemTemplate.Example</TemplateID>
+    <DefaultName>Example.pp</DefaultName>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem ReplaceParameters="true">Example.pp</ProjectItem>
+  </TemplateContent>
+</VSTemplate>
