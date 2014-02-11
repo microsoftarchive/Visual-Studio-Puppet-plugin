@@ -34,6 +34,8 @@ namespace PuppetLexer
         private const string PATTERN_DOLLAR_VAR     = "%r{\$(::)?(\w+::)*\w+}";
         private const string PATTERN_NUMBER         = "%r{\b(?:0[xX][0-9A-Fa-f]+|0?\d+(?:\.\d+)?(?:[eE]-?\d+)?)\b}";
 
+        public locator locator {get;set;}
+
         public Lexer()
         {
              throw new NotImplementedException();
@@ -41,37 +43,59 @@ namespace PuppetLexer
 
         private void Clear()
         {
-             throw new NotImplementedException();
+            locator = null;
+            //scanner = null;
+            //lexing_context = null;
         }
 
-        public void lex_string(string input, string path)
+        public void Lex_String(string input, string path = "")
         {
-             throw new NotImplementedException();
+            Initvars();
+            // scanner = new StringScanner();
+            locator = new locator(input,path); //todo
         }
 
-        //Lexes an unquoted string.
-        // @param string [String] the string to lex
-        // @param locator [Puppet::Pops::Parser::Locator] the locator to use (a default is used if nil is given)
-        // @param escapes [Array<String>] array of character strings representing the escape sequences to transform
-        // @param interpolate [Boolean] whether interpolation of expressions should be made or not.
+       
+        public void lex_unquoted_string(string input, locator locatorobj, string[] escapes , bool interpolate)
+        {
+            Initvars();
+            if (locatorobj ==null){
+                locator = new locator(input,string.Empty);
+            }
+            else{
+                locator = locatorobj;
+            }
+            if(escapes == null){
+                 //lexing_context[:escapes] = escapes;
+            }
+            else{
+                //lexing_context[:escapes] = UQ_ESCAPES; //todo
+            }
+            if(interpolate || escapes.Length > 0){
+                //lexing_context[:uq_slurp_pattern] = SLURP_UQ_PATTERN;
+            }
+            else{
+                //lexing_context[:uq_slurp_pattern] = SLURP_ALL_PATTERN;
+            }
+        }
         
-        public void lex_unquoted_string(string input, string locator, string[] escapes, bool interpolate)
+
+        private void Initvars()
         {
+ 	      
         }
 
-        public void file(File file)
+     
+        public void lex_file(string filePath)
         {
-            lex_file(file);
-        }
+ 	        Initvars();
+            string Contents = string.Empty;
 
-        private void lex_file(File file)
-        {
- 	        throw new NotImplementedException();
-        }
-
-        private void initvars()
-        {
-            throw new NotImplementedException();
+            //if(PuppetFileSystem.Exists(filePath)){
+            //     Contents = PuppetFileSystem.Read(filePath);    // todo
+            //}
+            // scanner = new StringScanner(Contents);
+            locator = new locator(Contents,filePath);
         }
 
         // Scans all of the content and returns it in an array
