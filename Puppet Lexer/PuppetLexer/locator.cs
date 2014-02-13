@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PuppetLexer
 {
-    class locator
+    public class locator
     {
         public locator(string input, string path)
         {
