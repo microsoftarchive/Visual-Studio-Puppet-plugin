@@ -10,7 +10,7 @@ namespace PuppetLexer
     {
         public locator(string input, string path)
         {
-                
+            
         }
     }
 }

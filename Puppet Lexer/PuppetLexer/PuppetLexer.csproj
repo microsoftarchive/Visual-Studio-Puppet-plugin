@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Lexer.cs" />
+    <Compile Include="LexerSupport.cs" />
     <Compile Include="locator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
