@@ -12,5 +12,16 @@ namespace PuppetLexer
         {
             
         }
+        public string file { get; set; }
+
+        public int lineForOffset(int? offSet)
+        {
+            return 0;
+        }
+
+        public int posOnLine(int? offSet)
+        {
+            return 0;
+        }
     }
 }

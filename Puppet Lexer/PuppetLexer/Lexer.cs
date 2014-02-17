@@ -125,7 +125,7 @@ namespace PuppetLexer
 
         private readonly string STRING_BSLASH_BSLASH = "\\";
 
-        public locator locator { get; set; }
+        private locator locator;
         Hashtable lexingContext = new Hashtable();
         ArrayList tokenQueue;
         StringScanner scanner;
