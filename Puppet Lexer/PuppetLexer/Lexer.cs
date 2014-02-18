@@ -86,7 +86,7 @@ namespace PuppetLexer
         private readonly string[] TOKEN_OTHER = { "OTHER", null, "0" };
 
 
-        private readonly Dictionary<string, string[]> KEYWORDS = new Dictionary<string, string[]>
+        public readonly Dictionary<string, string[]> KEYWORDS = new Dictionary<string, string[]>
         {
             {"case"     , new string[] {"CASE",    "case",     "4"}},
             { "class"    ,new string[] {"CLASS",   "class",    "5"}},
@@ -106,7 +106,7 @@ namespace PuppetLexer
             { "unless"   ,new string[] {"UNLESS",  "unless",   "6"}}
         };
 
-        private readonly Regex PATTERN_WS = new Regex(@"[[:blank:]\r]+");
+        public readonly Regex PATTERN_WS = new Regex(@"[[:blank:]\r]+");
 
         private readonly Regex PATTERN_COMMENT = new Regex("#.*\r?");
         private readonly Regex PATTERN_MLCOMMENT = new Regex(@"/\*(.*?)\*/");
@@ -227,7 +227,7 @@ namespace PuppetLexer
             //expr("token", new tokenValue());
         }
 
-        public void LexToken()
+        public ArrayList LexToken()
         {
             int before = scanner.Pos;
 
@@ -240,41 +240,42 @@ namespace PuppetLexer
 
             string[] token;
             string value;
+            ArrayList lexedToken = new ArrayList();
             
 
             switch (la0)
             {
                 case '.':
-                    Emit(TOKEN_DOT, before);
+                    lexedToken = Emit(TOKEN_DOT, before);
                     break;
                 case ',':
-                    Emit(TOKEN_COMMA, before);
+                    lexedToken = Emit(TOKEN_COMMA, before);
                     break;
                 case '[':
                     if (((string)lexingContext["after"] == "NAME") && (before == 0 /* || scanner.string[before-1,1] =~ /[[:blank:]\r\n]+/)*/ )){
-                        Emit(TOKEN_LISTSTART, before);
+                        lexedToken = Emit(TOKEN_LISTSTART, before);
                     }
                     else{
-                        Emit(TOKEN_LBRACK, before);
+                        lexedToken = Emit(TOKEN_LBRACK, before);
                     }
                     break;
                 case ']':
-                    Emit(TOKEN_RBRACK, before);
+                    lexedToken = Emit(TOKEN_RBRACK, before);
                     break;
                 case '(':
-                    Emit(TOKEN_LPAREN, before);
+                    lexedToken = Emit(TOKEN_LPAREN, before);
                     break;
                 case ')':
-                    Emit(TOKEN_RPAREN, before);
+                    lexedToken = Emit(TOKEN_RPAREN, before);
                     break;
                 case ';':
-                    Emit(TOKEN_SEMIC, before);
+                    lexedToken = Emit(TOKEN_SEMIC, before);
                     break;
                 case '?':
-                    Emit(TOKEN_QMARK, before);
+                    lexedToken = Emit(TOKEN_QMARK, before);
                     break;
                 case '*':
-                    Emit(TOKEN_TIMES, before);
+                    lexedToken = Emit(TOKEN_TIMES, before);
                     break;
                 case '%':
                     if (la1 == '>' && (bool)lexingContext["epp_mode"]){
@@ -283,7 +284,7 @@ namespace PuppetLexer
                         //interpolate_epp(); //todo
                     }
                     else{
-                        Emit(TOKEN_MODULO, before);
+                        lexedToken = Emit(TOKEN_MODULO, before);
                     }
                     break;
                 case '{':
@@ -299,11 +300,11 @@ namespace PuppetLexer
                     else{
                         token = TOKEN_LBRACE;
                     }
-                    Emit(token, before);
+                    lexedToken = Emit(token, before);
                     break;
                 case '}':
                     lexingContext["brace_count"] = (int)lexingContext["brace_count"] - 1;
-                    Emit(TOKEN_RBRACE, before);
+                    lexedToken = Emit(TOKEN_RBRACE, before);
                     break;
                     
                 // TOKENS @, @@, @(
@@ -311,13 +312,13 @@ namespace PuppetLexer
                     switch (la1)
                     {
                         case '@':
-                            Emit(TOKEN_ATAT, before); 
+                            lexedToken = Emit(TOKEN_ATAT, before); 
                             break;
                         case '(':
                             //heredoc(); todo
                             break;
                         default:
-                            Emit(TOKEN_AT, before);
+                            lexedToken = Emit(TOKEN_AT, before);
                             break;
                     }
                     break;
@@ -328,10 +329,10 @@ namespace PuppetLexer
                     {
                         case '>':
                             token = la2 == '>' ? TOKEN_RRCOLLECT : TOKEN_RCOLLECT;
-                            Emit(token, before); 
+                            lexedToken = Emit(token, before); 
                             break;
                         default:
-                            Emit(TOKEN_PIPE, before);
+                            lexedToken = Emit(TOKEN_PIPE, before);
                             break;
                     }
                     break;
@@ -352,7 +353,7 @@ namespace PuppetLexer
                             token = TOKEN_EQUALS;
                             break;
                     }
-                    Emit(token, before);
+                    lexedToken = Emit(token, before);
                     break;
 
                 // TOKENS '+', '+=', and '+>'
@@ -369,7 +370,7 @@ namespace PuppetLexer
                             token = TOKEN_PLUS;
                             break;
                     }
-                    Emit(token, before);
+                    lexedToken = Emit(token, before);
                     break;
 
                 // # TOKENS '-', '->', and epp '-%>' (end of interpolation with trim)
@@ -391,7 +392,7 @@ namespace PuppetLexer
                             token = TOKEN_MINUS;
                             break;
                     }
-                    Emit(token, before);
+                    lexedToken = Emit(token, before);
                     break;
 
                 case '!':
@@ -407,11 +408,11 @@ namespace PuppetLexer
                             token = TOKEN_NOT;
                             break;
                     }
-                    Emit(token, before);
+                    lexedToken = Emit(token, before);
                     break;
 
                 case '~':
-                    Emit(la1 == '>' ? TOKEN_IN_EDGE_SUB : TOKEN_TILDE, before);
+                    lexedToken = Emit(la1 == '>' ? TOKEN_IN_EDGE_SUB : TOKEN_TILDE, before);
                     break;
                 case '#':
                     //scanner.skip(PATTERN_COMMENT); //todo
@@ -432,11 +433,11 @@ namespace PuppetLexer
                                 string regex = PATTERN_REGEX_A.Replace(value, "", 1);
                                 regex = PATTERN_REGEX_Z.Replace(regex, "", 1);
                                 regex = PATTERN_REGEX_ESC.Replace(regex, "/");
-                                EmitCompleted(new string[] { "REGEX", regex, Convert.ToString(scanner.Pos - before) }, before);
+                                lexedToken = EmitCompleted(new string[] { "REGEX", regex, Convert.ToString(scanner.Pos - before) }, before);
                             }
                             else
                             {
-                                Emit(TOKEN_DIV, before);
+                                lexedToken = Emit(TOKEN_DIV, before);
                             }
                             break;
                     }
@@ -467,7 +468,7 @@ namespace PuppetLexer
                             token = TOKEN_LESSTHAN;
                             break;
                     }
-                    Emit(token, before);
+                    lexedToken = Emit(token, before);
                     break;
 
                   //# TOKENS >, >=, >>
@@ -484,7 +485,7 @@ namespace PuppetLexer
                             token = TOKEN_GREATERTHAN;
                             break;
                     }
-                    Emit(token, before);
+                    lexedToken = Emit(token, before);
                     break;
                     
                  //# TOKENS :, ::CLASSREF, ::NAME
@@ -501,7 +502,7 @@ namespace PuppetLexer
                             if (!string.IsNullOrEmpty(value))
                             {
                                 int after = scanner.Pos;
-                                EmitCompleted(new string[] { "CLASSREF", value,Convert.ToString(after - before) }, before);
+                                lexedToken = EmitCompleted(new string[] { "CLASSREF", value, Convert.ToString(after - before) }, before);
                             }
                             else
                             {
@@ -516,7 +517,7 @@ namespace PuppetLexer
                             value = scanner.Scan(PATTERN_NAME);
                             if (string.IsNullOrEmpty(value))
                             {
-                                EmitCompleted(new string[] { "NAME", value, Convert.ToString(scanner.Pos - before) }, before);
+                                lexedToken = EmitCompleted(new string[] { "NAME", value, Convert.ToString(scanner.Pos - before) }, before);
                             }
                             else
                             {
@@ -528,7 +529,7 @@ namespace PuppetLexer
                     }
                     else
                     {
-                        Emit(TOKEN_COLON, before);
+                        lexedToken = Emit(TOKEN_COLON, before);
                     }
                     break;
 
@@ -537,11 +538,11 @@ namespace PuppetLexer
                     if (string.IsNullOrEmpty(value))
                     {
                         token = new string [] { "VARIABLE", value.Substring(1, value.Length - 1), Convert.ToString(scanner.Pos - before) };
-                        EmitCompleted(token, before);
+                        lexedToken = EmitCompleted(token, before);
                     }
                     else
                         //# consume the $ and let higher layer complain about the error instead of getting a syntax error
-                        Emit(TOKEN_VARIABLE_EMPTY, before);
+                        lexedToken = Emit(TOKEN_VARIABLE_EMPTY, before);
                     break;
                 case '"':
                     //# Recursive string interpolation, 'interpolate' either returns a STRING token, or
@@ -549,7 +550,7 @@ namespace PuppetLexer
                     //interpolate_dq(); todo
                     break;
                 case '\'':
-                    EmitCompleted(new string []{"STRING"/*,slurp_sqstring*/,Convert.ToString(before-scanner.Pos)}, before);
+                    lexedToken = EmitCompleted(new string[] { "STRING"/*,slurp_sqstring*/, Convert.ToString(before - scanner.Pos) }, before);
                     break;
                 case '0':
                 case '1':
@@ -565,7 +566,7 @@ namespace PuppetLexer
                       if(string.IsNullOrEmpty(value))
                       {
                        //assert_numeric(value, length); todo
-                       EmitCompleted(new string[] { "NUMBER", value, Convert.ToString(scanner.Pos - before) }, before);
+                          lexedToken = EmitCompleted(new string[] { "NUMBER", value, Convert.ToString(scanner.Pos - before) }, before);
                       }
                       else{
                        // # move to faulty position ([0-9] was ok)
@@ -580,7 +581,7 @@ namespace PuppetLexer
                     if(!string.IsNullOrEmpty(value))
                     {
                         token = KEYWORDS[value] != null ? KEYWORDS[value] : new string [] { "NAME", value, Convert.ToString(scanner.Pos - before) };
-                        EmitCompleted(token, before);
+                        lexedToken = EmitCompleted(token, before);
                     }
                     else
                     {
@@ -619,7 +620,7 @@ namespace PuppetLexer
                     if(!string.IsNullOrEmpty(value))
                     {
                         token = new string[] { "CLASSREF", value, Convert.ToString(scanner.Pos - before) };
-                        EmitCompleted(token, before);
+                        lexedToken = EmitCompleted(token, before);
                     }
                     else
                     {
@@ -649,10 +650,12 @@ namespace PuppetLexer
                     if(scanner.Skip(PATTERN_WS) == null)
                     {
                     //# "unrecognized char"
-                         Emit(new string [] {"OTHER",la0.ToString(),"1"}, before);
+                        lexedToken = Emit(new string[] { "OTHER", la0.ToString(), "1" }, before);
                     }
                     break;
             }
+
+            return lexedToken;
         }
 
         private ArrayList Emit(string[] token, int byteOffset)
@@ -661,15 +664,15 @@ namespace PuppetLexer
            return new ArrayList { token[0], new tokenValue(token, byteOffset, locator) };
         }
 
-        private ArrayList EmitCompleted(string[] token, int byteOffset)
+        public ArrayList EmitCompleted(string[] token, int byteOffset)
         {
             return new ArrayList { token[0], new tokenValue(token, byteOffset, locator) };
         }
-        private void EnqueueCompleted(string[] token, int byteOffset)
+        public void EnqueueCompleted(string[] token, int byteOffset)
         {
             tokenQueue.Add(EmitCompleted(token,byteOffset));
         }
-        private void Enqueue(ArrayList emittedToken)
+        public void Enqueue(ArrayList emittedToken)
         {
             tokenQueue.Add(emittedToken);
         }

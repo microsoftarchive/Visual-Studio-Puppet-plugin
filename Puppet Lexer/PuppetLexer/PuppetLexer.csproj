@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InterpolationSupport.cs" />
     <Compile Include="Lexer.cs" />
     <Compile Include="LexerSupport.cs" />
     <Compile Include="locator.cs" />
