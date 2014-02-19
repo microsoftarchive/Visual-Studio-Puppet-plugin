@@ -185,6 +185,10 @@ namespace PuppetLexer
         {
             return "";
         }
+
+        public string matched() {
+            return "";
+        }
     }
 }
 
