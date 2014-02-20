@@ -1,0 +1,4 @@
+C:\Users\v-vlshch\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\Microsoft.OpenTech\LanguageSupport\1.0\\LanguageSupport.dll
+C:\Users\v-vlshch\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\Microsoft.OpenTech\LanguageSupport\1.0\\LanguageSupport.pkgdef
+C:\Users\v-vlshch\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\Microsoft.OpenTech\LanguageSupport\1.0\\extension.vsixmanifest
+C:\Users\v-vlshch\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\Microsoft.OpenTech\LanguageSupport\1.0\\LanguageSupport.pdb

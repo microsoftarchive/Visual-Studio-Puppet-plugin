@@ -1,0 +1,14 @@
+D:\Projects\Puppet\VSPuppet\LanguageSupport\obj\Debug\VSPackage.resources
+D:\Projects\Puppet\VSPuppet\LanguageSupport\obj\Debug\MicrosoftOpenTech.LanguageSupport.Resources.resources
+D:\Projects\Puppet\VSPuppet\LanguageSupport\obj\Debug\LanguageSupport.csproj.GenerateResource.Cache
+D:\Projects\Puppet\VSPuppet\LanguageSupport\bin\Debug\LanguageSupport.dll
+D:\Projects\Puppet\VSPuppet\LanguageSupport\bin\Debug\LanguageSupport.pdb
+D:\Projects\Puppet\VSPuppet\LanguageSupport\bin\Debug\LanguageSupport.pkgdef
+D:\Projects\Puppet\VSPuppet\LanguageSupport\bin\Debug\LanguageSupport.vsix
+D:\Projects\Puppet\VSPuppet\LanguageSupport\bin\Debug\extension.vsixmanifest
+D:\Projects\Puppet\VSPuppet\LanguageSupport\obj\Debug\LanguageSupport.csprojResolveAssemblyReference.cache
+D:\Projects\Puppet\VSPuppet\LanguageSupport\obj\Debug\LanguageSupport.dll
+D:\Projects\Puppet\VSPuppet\LanguageSupport\obj\Debug\LanguageSupport.pdb
+D:\Projects\Puppet\VSPuppet\LanguageSupport\obj\Debug\LanguageSupport.pkgdef
+D:\Projects\Puppet\VSPuppet\LanguageSupport\obj\Debug\LanguageSupport.latest.pkgdef
+D:\Projects\Puppet\VSPuppet\LanguageSupport\obj\Debug\extension.vsixmanifest

@@ -1,0 +1,10 @@
+D:\Projects\Puppet\VSPuppet\LanguageSupport\LanguageSupport_UnitTests\obj\Debug\LanguageSupport_UnitTests.csprojResolveAssemblyReference.cache
+D:\Projects\Puppet\VSPuppet\LanguageSupport\LanguageSupport_UnitTests\bin\Debug\LanguageSupport_UnitTests.dll
+D:\Projects\Puppet\VSPuppet\LanguageSupport\LanguageSupport_UnitTests\bin\Debug\LanguageSupport_UnitTests.pdb
+D:\Projects\Puppet\VSPuppet\LanguageSupport\LanguageSupport_UnitTests\bin\Debug\LanguageSupport.dll
+D:\Projects\Puppet\VSPuppet\LanguageSupport\LanguageSupport_UnitTests\bin\Debug\Microsoft.VSSDK.TestHostFramework.dll
+D:\Projects\Puppet\VSPuppet\LanguageSupport\LanguageSupport_UnitTests\bin\Debug\Microsoft.VSSDK.UnitTestLibrary.dll
+D:\Projects\Puppet\VSPuppet\LanguageSupport\LanguageSupport_UnitTests\bin\Debug\LanguageSupport.pdb
+D:\Projects\Puppet\VSPuppet\LanguageSupport\LanguageSupport_UnitTests\bin\Debug\Microsoft.VSSDK.TestHostFramework.pdb
+D:\Projects\Puppet\VSPuppet\LanguageSupport\LanguageSupport_UnitTests\obj\Debug\LanguageSupport_UnitTests.dll
+D:\Projects\Puppet\VSPuppet\LanguageSupport\LanguageSupport_UnitTests\obj\Debug\LanguageSupport_UnitTests.pdb

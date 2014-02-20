@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!--
+    The ManagedPuppetPath property should be defined to point to the directory where this file is located before importing this file.
+    Failure to define this will result in build error.
+  -->
+
+  <!-- Provide a default value for $(ManagedPuppetPath) -->
+  <PropertyGroup>
+    <ManagedPuppetPath Condition="'$(ManagedPuppetPath)'==''">.</ManagedPuppetPath>
+  </PropertyGroup>
+
+  <!-- 
+  It's possible to provide references for inclusion in the project via this file, but
+  none are specified here.  All references are included in the contained project
+  instead.
+  -->
+
+  <ItemGroup>
+    <Compile Include="$(ManagedPuppetPath)\AuthoringScope.cs" >
+      <Link>ManagedPuppet\AuthoringScope.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\Configuration.cs" >
+      <Link>ManagedPuppet\Configuration.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\Declaration.cs" >
+      <Link>ManagedPuppet\Declaration.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\Declarations.cs" >
+      <Link>ManagedPuppet\Declarations.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\IASTResolver.cs" >
+      <Link>ManagedPuppet\IASTResolver.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\IScanner.cs" >
+      <Link>ManagedPuppet\IScanner.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\LanguageService.cs" >
+      <Link>ManagedPuppet\LanguageService.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\LineScanner.cs" >
+      <Link>ManagedPuppet\LineScanner.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\Method.cs" >
+      <Link>ManagedPuppet\Method.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\Methods.cs" >
+      <Link>ManagedPuppet\Methods.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\Package.cs" >
+      <Link>ManagedPuppet\Package.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\Parser.cs" >
+      <Link>ManagedPuppet\Parser.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\ParserStack.cs" >
+      <Link>ManagedPuppet\ParserStack.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\Rule.cs" >
+      <Link>ManagedPuppet\Rule.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\ShiftReduceParser.cs" >
+      <Link>ManagedPuppet\ShiftReduceParser.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\Source.cs" >
+      <Link>ManagedPuppet\Source.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(ManagedPuppetPath)\State.cs" >
+      <Link>ManagedPuppet\State.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+  </ItemGroup>
+ 
+</Project>
