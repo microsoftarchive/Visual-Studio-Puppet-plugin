@@ -1,4 +1,0 @@
-C:\Projects\PuppetLanguage.Templates\PuppetLanguage.ItemTemplate.Example\bin\Debug\ItemTemplates\CSharp\1033\PuppetLanguage.ItemTemplate.Example.zip
-C:\Projects\PuppetLanguage.Templates\PuppetLanguage.ItemTemplate.Example\obj\Debug\CSharp\1033\PuppetLanguage.ItemTemplate.Example.zip
-C:\Projects\PuppetLanguage.Templates\PuppetLanguage.ItemTemplate.Example\obj\Debug\PuppetLanguage.ItemTemplate.Example.dll
-C:\Projects\PuppetLanguage.Templates\PuppetLanguage.ItemTemplate.Example\obj\Debug\PuppetLanguage.ItemTemplate.Example.pdb
