@@ -3,7 +3,7 @@
   <Metadata>
     <Identity Id="7b515f4e-1062-4f62-a2df-b4e12e24fe8a" Version="1.0" Language="en-US" Publisher="Microsoft.OpenTech" />
     <DisplayName>LanguageSupport</DisplayName>
-    <Description>Puppet language support in VS2013</Description>
+    <Description xml:space="preserve">Puppet language support in VS2013</Description>
   </Metadata>
   <Installation InstalledByMsi="false">
     <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[12.0]" />
@@ -14,5 +14,7 @@
   </Dependencies>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="Template.Project" d:TargetPath="|Template.Project;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="Template.Item" d:TargetPath="|Template.Item;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
   </Assets>
 </PackageManifest>
