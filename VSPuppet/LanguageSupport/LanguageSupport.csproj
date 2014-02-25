@@ -59,9 +59,9 @@
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\Configuration.cs" />
     <Compile Include="Base\Declaration.cs" />
     <Compile Include="Base\IASTResolver.cs" />
     <Compile Include="Base\IScanner.cs" />
@@ -79,7 +79,6 @@
     <Compile Include="Base\ShiftReduceParser.cs" />
     <Compile Include="Base\State.cs" />
     <Compile Include="Custom\Configuration.cs" />
-    <Compile Include="Custom\LanguageService.cs" />
     <Compile Include="Custom\Package.cs" />
     <Compile Include="Custom\PuppetParser.cs" />
     <Compile Include="Custom\Resolver.cs" />
@@ -120,6 +119,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Package.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Template.Item\Template.Item.csproj">
+      <Project>{51EC745B-20C0-4671-BB15-2C81F7686105}</Project>
+      <Name>Template.Item</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Template.Project\Template.Project.csproj">
+      <Project>{03A46A02-174D-48A4-954E-70DEFA89E6B2}</Project>
+      <Name>Template.Project</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>

@@ -3,9 +3,12 @@
 Copyright (c) Microsoft Corporation. All rights reserved.
 
 ***************************************************************************/
+
+/*
 namespace Puppet
 {
     using Microsoft.VisualStudio.Package;
+    using System.Runtime.InteropServices;
 
     /*
      * The Puppet.LanguageService class is needed to register the VS language service.  
@@ -16,14 +19,14 @@ namespace Puppet
      * Note that the Puppet.PuppetLanguageService class derives from the Managed 
      * Package Framework's LanguageService class.
      *     
-     */
+     /
 
-    //[Guid("5A473844-3A7A-4BCA-BC7A-95C8E87146C3")]
+    [Guid("90BECFDE-F4AF-4797-9519-2B5278CC18C5")]
     class LanguageService : PuppetLanguageService
     {
         public override string GetFormatFilterList()
         {
-            return "MyC File (*.pp)\n*.pp";
+            return "Puppet manifest (*.pp)\n*.pp";
         }
 
         public override AuthoringScope ParseSource(ParseRequest req)
@@ -40,3 +43,4 @@ namespace Puppet
         } 
     }
 }
+*/

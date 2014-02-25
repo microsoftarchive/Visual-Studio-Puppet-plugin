@@ -33,7 +33,7 @@ namespace Puppet
 
         public override CommentInfo GetCommentFormat()
         {
-             return Configuration.MyCommentInfo;
+             return Configuration.PuppetCommentInfo;
         }
     }
 }

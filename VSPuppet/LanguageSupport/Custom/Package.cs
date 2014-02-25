@@ -12,9 +12,9 @@ namespace Puppet
 
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [PackageRegistration(UseManagedResourcesOnly=true)]
-    [ProvideServiceAttribute(typeof(Puppet.LanguageService), ServiceName = "VS Puppet Language Support")]
-    [ProvideLanguageExtension(typeof(Puppet.LanguageService), Configuration.Extension)]
-    [ProvideLanguageServiceAttribute(typeof(Puppet.LanguageService), 
+    [ProvideService(typeof(PuppetLanguageService), ServiceName = "VS Puppet Language Support")]
+    [ProvideLanguageExtension(typeof(PuppetLanguageService), Configuration.Extension)]
+    [ProvideLanguageService(typeof(PuppetLanguageService), 
         Configuration.Name, 
         106,
         CodeSense = true,
@@ -25,7 +25,7 @@ namespace Puppet
         ShowCompletion = true,
         AutoOutlining = true,
         EnableAsyncCompletion = true,
-//        RequestStockColors = true,
+        RequestStockColors = false,
         CodeSenseDelay = 0)]
     [Guid(GuidList.guidLanguageSupportPkgString)]
     class Package : PuppetPackage

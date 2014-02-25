@@ -11,7 +11,6 @@ namespace Puppet.ParserGenerator
         public T[] array = new T[1];
         public int top = 0;
 
-
         public void Push(T value)
         {
             if (top >= array.Length)

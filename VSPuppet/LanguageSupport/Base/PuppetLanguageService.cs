@@ -4,37 +4,215 @@ Copyright (c) Microsoft Corporation. All rights reserved.
 
 ***************************************************************************/
 
+
 namespace Puppet
 {
     using Microsoft.VisualStudio.Package;
     using Microsoft.VisualStudio.TextManager.Interop;
+    using Puppet.Parser;
     using System;
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
 
-    public abstract class PuppetLanguageService : Microsoft.VisualStudio.Package.LanguageService
+
+    [Guid("90BECFDE-F4AF-4797-9519-2B5278CC18C5")]
+    public class PuppetLanguageService : Microsoft.VisualStudio.Package.LanguageService
     {
-/*       
- *      #region Custom Colors
+
+        public override string GetFormatFilterList()
+        {
+            return "Puppet manifest (*.pp)\n*.pp";
+        }
+
+        #region IVsProvideColorableItems
+
+        public enum PuppetTokenColor
+        {
+            Defaul = 100,
+            Keyword,
+            Identifier,
+            String,
+            Number,
+            Text,
+            Operator,
+            Delimiter,
+            Classref,
+            BlockComment,
+            LineComment,
+            Variable,
+            Regex,
+            Error,
+            Size = Error - Defaul
+        }
+
+        public struct TokenDefinition
+        {
+            public TokenDefinition(TokenType type, PuppetTokenColor color, TokenTriggers triggers)
+            {
+                this.TokenType = type;
+                this.TokenColor = color;
+                this.TokenTriggers = triggers;
+            }
+
+            public TokenType TokenType;
+            public PuppetTokenColor TokenColor;
+            public TokenTriggers TokenTriggers;
+        }
+
+        private readonly TokenDefinition defaultDefinition = new TokenDefinition(TokenType.Text, PuppetTokenColor.Text, TokenTriggers.None);
+
+        private readonly Dictionary<int, TokenDefinition> definitions = new Dictionary<int, TokenDefinition>();
+
+        public void AddTokenDefinition(int token, TokenType type, PuppetTokenColor color, TokenTriggers trigger)
+        {
+            if (!definitions.ContainsKey(token))
+            {
+                definitions.Add(token, new TokenDefinition(type, color, trigger));
+            }
+
+            //Configuration.Definitions[token] = new TokenDefinition(type, color, trigger);
+        }
+
+        public TokenDefinition GetTokenDefinition(int token)
+        {
+            TokenDefinition result;
+            return definitions.TryGetValue(token, out result) ? result : defaultDefinition;
+        }
+
+        public PuppetLanguageService() : base()
+        {
+            InitCustomColors();
+            AddTokenDefinitions();
+        }
+
+        private readonly Dictionary<int, ColorableItem> colorableItems = new Dictionary<int, ColorableItem>();
+        public Dictionary<int, ColorableItem> ColorableItems
+        {
+            get { return colorableItems; }
+        }
+
+        private void InitCustomColor(PuppetTokenColor id, string name, string dispname, COLORINDEX foreground, COLORINDEX background, bool bold = false, bool strikethrough = false)
+        {
+            var fontFlags = (uint)FONTFLAGS.FF_DEFAULT;
+
+            if (bold)
+                fontFlags = fontFlags | (uint)FONTFLAGS.FF_BOLD;
+            if (strikethrough)
+                fontFlags = fontFlags | (uint)FONTFLAGS.FF_STRIKETHROUGH;
+
+            ColorableItems.Add((int)id, new ColorableItem(name, dispname, foreground, background, System.Drawing.Color.Empty, System.Drawing.Color.Empty, (FONTFLAGS)fontFlags));
+        }
+
+        private void InitCustomColors()
+        {
+            InitCustomColor(PuppetTokenColor.Keyword, "Keyword", "Puppet Keyword", COLORINDEX.CI_MAGENTA, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Identifier, "Identifier", "Puppet Identifier", COLORINDEX.CI_BROWN, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.String, "String", "Puppet String", COLORINDEX.CI_DARKGREEN, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Number, "Number", "Puppet Number", COLORINDEX.CI_RED, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Text, "Text", "Puppet Text", COLORINDEX.CI_SYSPLAINTEXT_FG, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Operator, "Operator", "Puppet Operator", COLORINDEX.CI_SYSPLAINTEXT_FG, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Delimiter, "Delimiter", "Puppet Delimiter", COLORINDEX.CI_SYSPLAINTEXT_FG, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.BlockComment, "Comment", "Puppet Block Comment", COLORINDEX.CI_DARKGREEN, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.LineComment, "Comment", "Puppet Line Comment", COLORINDEX.CI_DARKGRAY, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Variable, "Identifier", "Puppet Variable", COLORINDEX.CI_PURPLE, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Regex, "Literal", "Puppet Regex", COLORINDEX.CI_MAROON, COLORINDEX.CI_USERTEXT_BK, false, false);
+            InitCustomColor(PuppetTokenColor.Classref, "Identifier", "Puppet Classref", COLORINDEX.CI_MAGENTA, COLORINDEX.CI_USERTEXT_BK, false, false);
+            InitCustomColor(PuppetTokenColor.Error, "Error", "Puppet Error", COLORINDEX.CI_RED, COLORINDEX.CI_USERTEXT_BK, false, false);
+
+            if ((int)PuppetTokenColor.Size != ColorableItems.Count)
+            {
+                throw new IndexOutOfRangeException("ColorableItems");
+            }
+        }
+
+        private void AddTokenDefinitions()
+        {
+            foreach (var kw in Lexer.Scanner.Keywords)
+            {
+                AddTokenDefinition((int)kw.Value, TokenType.Keyword, PuppetTokenColor.Keyword, TokenTriggers.None);
+            }
+
+            AddTokenDefinition((int)Tokens.NUMBER, TokenType.Literal, PuppetTokenColor.Number, TokenTriggers.None);
+
+            AddTokenDefinition((int)Tokens.STRING, TokenType.String, PuppetTokenColor.String, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.VARIABLE, TokenType.Identifier, PuppetTokenColor.Variable, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.CLASSREF, TokenType.Identifier, PuppetTokenColor.Classref, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.NAME, TokenType.Identifier, PuppetTokenColor.Identifier, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.REGEX, TokenType.Literal, PuppetTokenColor.Regex, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.BL_COMMENT, TokenType.Comment, PuppetTokenColor.BlockComment, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.LN_COMMENT, TokenType.LineComment, PuppetTokenColor.LineComment, TokenTriggers.None);
+
+            AddTokenDefinition((int)Tokens.LBRACK, TokenType.Delimiter, PuppetTokenColor.Delimiter, TokenTriggers.MatchBraces);
+            AddTokenDefinition((int)Tokens.RBRACK, TokenType.Delimiter, PuppetTokenColor.Delimiter, TokenTriggers.MatchBraces);
+            AddTokenDefinition((int)Tokens.LBRACE, TokenType.Delimiter, PuppetTokenColor.Delimiter, TokenTriggers.MatchBraces);
+            AddTokenDefinition((int)Tokens.RBRACE, TokenType.Delimiter, PuppetTokenColor.Delimiter, TokenTriggers.MatchBraces);
+            AddTokenDefinition((int)Tokens.LPAREN, TokenType.Delimiter, PuppetTokenColor.Delimiter, TokenTriggers.MatchBraces);
+            AddTokenDefinition((int)Tokens.RPAREN, TokenType.Delimiter, PuppetTokenColor.Delimiter, TokenTriggers.MatchBraces);
+
+            AddTokenDefinition((int)Tokens.COLON, TokenType.Operator, PuppetTokenColor.Delimiter, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.COMMA, TokenType.Operator, PuppetTokenColor.Delimiter, TokenTriggers.None);
+            
+            AddTokenDefinition((int)Tokens.EQUALS, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.APPENDS, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.DELETES, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.ISEQUAL, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.NOTEQUAL, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.MATCH, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.NOMATCH, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.GREATEREQUAL, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.GREATERTHAN, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.LESSEQUAL, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.LESSTHAN, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.FARROW, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.PARROW, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.LSHIFT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.LLCOLLECT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.LCOLLECT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.RSHIFT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.RRCOLLECT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.RCOLLECT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.PLUS, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.MINUS, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.TIMES, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.MODULO, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.NOT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.DOT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.PIPE, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.AT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.ATAT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.SEMIC, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.QMARK, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.TILDE, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.IN_EDGE, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.IN_EDGE_SUB, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.OUT_EDGE, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.OUT_EDGE_SUB, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+
+            //// Extra token values internal to the scanner
+            AddTokenDefinition((int)Tokens.LEX_ERROR, TokenType.Text, PuppetTokenColor.Error, TokenTriggers.None);
+        }
 
         public override int GetColorableItem(int index, out IVsColorableItem item)
         {
-            if (index <= Configuration.ColorableItems.Count)
+
+            if (Enum.IsDefined(typeof (PuppetTokenColor), index)
+                && ColorableItems.ContainsKey(index))
             {
-                item = Configuration.ColorableItems[index - 1];
+                item = ColorableItems[index];
                 return Microsoft.VisualStudio.VSConstants.S_OK;
             }
-            else
-            {
-                throw new ArgumentNullException("index");
-            }
+
+            return base.GetColorableItem(index, out item);
         }
 
         public override int GetItemCount(out int count)
         {
-            count = Configuration.ColorableItems.Count;
+            count = ColorableItems.Count;
             return Microsoft.VisualStudio.VSConstants.S_OK;
         }
-        #endregion
-*/
+
+        #endregion IVsProvideColorableItems
+
         #region MPF Accessor and Factory specialisation
 
         private LanguagePreferences preferences;
@@ -45,7 +223,7 @@ namespace Puppet
             {
                 this.preferences = 
                     new LanguagePreferences(this.Site,
-                        typeof(Puppet.LanguageService).GUID,
+                        typeof(PuppetLanguageService).GUID,
                         this.Name);
 
                 this.preferences.Init();
@@ -64,7 +242,7 @@ namespace Puppet
         public override IScanner GetScanner(IVsTextLines buffer)
         {
             if (scanner == null)
-                this.scanner = new LineScanner();
+                this.scanner = new LineScanner(this);
 
             return this.scanner;
         }
@@ -117,7 +295,7 @@ namespace Puppet
                 {
                     foreach (Parser.Error error in handler.SortedErrorList())
                     {
-                        TextSpan span = new TextSpan();
+                        var span = new TextSpan();
                         span.iStartLine = span.iEndLine = error.line - 1;
                         span.iStartIndex = error.column;
                         span.iEndIndex = error.column + error.length;
@@ -133,8 +311,6 @@ namespace Puppet
                 case ParseReason.MatchBraces:
                 case ParseReason.MemberSelectAndHighlightBraces:
                     int indexOfCaret = source.GetPositionOfLineIndex(req.Line, req.Col);
-                    // send matches to sink
-                    // this should (probably?) be filtered on req.Line / col
                     if (source.Braces != null)
                     {
                         foreach (TextSpan[] brace in source.Braces)
@@ -146,6 +322,8 @@ namespace Puppet
                         }
                     }
                     break;
+                case ParseReason.QuickInfo:
+                    return new PuppetAuthoringScope(this.GetSource(req.FileName)); 
                 default:
                     break;
             }

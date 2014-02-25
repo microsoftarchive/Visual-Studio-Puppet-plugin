@@ -9,6 +9,10 @@
 *    See the Apache 2 License for the specific language governing permissions and limitations under the License.
 */
 
+using System.Diagnostics;
+using System.Drawing;
+using Microsoft.VisualStudio;
+
 namespace Microsoft.PuppetLanguagePackage {
 
 using Microsoft.VisualStudio.Package;
@@ -16,6 +20,105 @@ using Microsoft.VisualStudio.TextManager.Interop;
 
 public class PuppetLanguageService : LanguageService
 {
+
+    private ColorableItem[] _colorableItems;
+
+    // other code ¡­
+    public PuppetLanguageService()
+        : base()
+    {
+        _colorableItems = CreateColorableItems();
+    }
+    // other code ¡­
+    #region IVsProvideColorableItems Members
+    /* This specific language does not really need to provide colorable items because it
+    * does not define any item different from the default ones, but the base class has
+    * an empty implementation of IVsProvideColorableItems, so any language service that
+    * derives from it must implement the methods of this interface, otherwise there are
+    * errors when the shell loads an editor to show a file associated to this language.
+    * */
+
+    public override int GetColorableItem(int index, out IVsColorableItem item)
+    {
+        if (index < 1)
+        {
+            Debug.Assert(false, "GetColorableItem(index, item) - index is out of range");
+            item = null;
+            return VSConstants.S_FALSE;
+        }
+
+        item = _colorableItems[index - 1];
+        return VSConstants.S_OK;
+    }
+
+    public override int GetItemCount(out int count)
+    {
+        count = 0;
+        if (_colorableItems != null)
+        {
+            count = _colorableItems.Length;
+        }
+
+        return VSConstants.S_OK;
+    }
+
+    #endregion
+    // other code ¡­
+    public static ColorableItem[] CreateColorableItems()
+    {
+        ColorableItem[] items = new ColorableItem[]
+            {
+            new ColorableItem("MyKeyword",
+                "CustomLanguage Keyword",
+                COLORINDEX.CI_BLUE,
+                COLORINDEX.CI_USERTEXT_BK,
+                Color.Empty,
+                Color.Empty,
+                FONTFLAGS.FF_DEFAULT),
+            new ColorableItem("MyComment",
+                "CustomLanguage Comment",
+                COLORINDEX.CI_DARKGREEN,
+                COLORINDEX.CI_USERTEXT_BK,
+                Color.Empty,
+                Color.Empty,
+                FONTFLAGS.FF_DEFAULT),
+            new ColorableItem("MyIdentifier",
+                "CustomLanguage Identifier",
+                COLORINDEX.CI_SYSPLAINTEXT_FG,
+                COLORINDEX.CI_USERTEXT_BK,
+                Color.Empty,
+                Color.Empty,
+                FONTFLAGS.FF_DEFAULT),
+            new ColorableItem("MyString",
+                "CustomLanguage String",
+                COLORINDEX.CI_MAROON,
+                COLORINDEX.CI_USERTEXT_BK,
+                Color.Empty,
+                Color.Empty,
+                FONTFLAGS.FF_DEFAULT),
+            new ColorableItem("MyNumber",
+                "CustomLanguage Number",
+                COLORINDEX.CI_SYSPLAINTEXT_FG,
+                COLORINDEX.CI_USERTEXT_BK,
+                Color.Empty,
+                Color.Empty,
+                FONTFLAGS.FF_DEFAULT),
+            new ColorableItem("MyText",
+                "CustomLanguage Text",
+                COLORINDEX.CI_SYSPLAINTEXT_FG,
+                COLORINDEX.CI_USERTEXT_BK,
+                Color.Empty,
+                Color.Empty,
+                FONTFLAGS.FF_DEFAULT),
+            };
+
+        return items;
+    }
+
+
+
+    // BEFORE
+
     private LanguagePreferences languagePreferences;
 
     private const string name = "Puppet Labs Manifest Language";

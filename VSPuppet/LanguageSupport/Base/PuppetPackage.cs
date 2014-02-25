@@ -19,9 +19,9 @@ namespace Puppet
             ServiceCreatorCallback callback = new ServiceCreatorCallback(
                 delegate(IServiceContainer container, Type serviceType)
                 {
-                    if (typeof(Puppet.LanguageService) == serviceType)
+                    if (typeof(PuppetLanguageService) == serviceType)
                     {
-                        Puppet.LanguageService language = new Puppet.LanguageService();
+                        PuppetLanguageService language = new PuppetLanguageService();
                         language.SetSite(this);
 
                         // register for idle time callbacks
@@ -48,7 +48,7 @@ namespace Puppet
                 });
 
             // proffer the LanguageService
-            (this as IServiceContainer).AddService(typeof(Puppet.LanguageService), callback, true);
+            (this as IServiceContainer).AddService(typeof(PuppetLanguageService), callback, true);
         }
 
         protected override void Dispose(bool disposing)
@@ -79,7 +79,7 @@ namespace Puppet
 
         public int FDoIdle(uint grfidlef)
         {
-            PuppetLanguageService ls = GetService(typeof(Puppet.LanguageService)) as PuppetLanguageService;
+            PuppetLanguageService ls = GetService(typeof(PuppetLanguageService)) as PuppetLanguageService;
             
             if (ls != null)
             {

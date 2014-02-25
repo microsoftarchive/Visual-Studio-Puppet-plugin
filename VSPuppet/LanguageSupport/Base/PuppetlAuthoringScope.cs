@@ -51,7 +51,7 @@ namespace Puppet
             if (desc != null)
                 return desc.Remark;
 
-            return "UNDEFINED";
+            return string.Empty;
         }
 
         // ParseReason.CompleteWord

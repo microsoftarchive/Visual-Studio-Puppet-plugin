@@ -38,18 +38,18 @@ using System.Runtime.InteropServices;
 // in the Help/About dialog of Visual Studio.
 [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
 // This attribute is needed to let the shell know that this package exposes some menus.
-[ProvideMenuResource("Menus.ctmenu", 1)]
-[Guid(GuidList.guidPuppetLanguagePackagePkgString)]
-[ProvideServiceAttribute(typeof(PuppetLanguageService), ServiceName = "Puppet Language Service")]
-[ProvideLanguageServiceAttribute(typeof(PuppetLanguageService),
-                            "Puppet Language",
-                            106,             // resource ID of localized language name
-                            CodeSense = true,             // Supports IntelliSense
-                            RequestStockColors = false,   // Supplies custom colors
-                            EnableCommenting = true,      // Supports commenting out code
-                            EnableAsyncCompletion = true  // Supports background parsing
-                            )]
-[ProvideLanguageExtensionAttribute(typeof(PuppetLanguageService), ".pp")]
+//[ProvideMenuResource("Menus.ctmenu", 1)]
+//[Guid(GuidList.guidPuppetLanguagePackagePkgString)]
+//[ProvideService(typeof(PuppetLanguageService), ServiceName = "Puppet Language Service")]
+//[ProvideLanguageService(typeof(PuppetLanguageService),
+//                            "Puppet Language",
+//                            106,             // resource ID of localized language name
+//                            CodeSense = true,             // Supports IntelliSense
+//                            RequestStockColors = false,   // Supplies custom colors
+//                            EnableCommenting = true,      // Supports commenting out code
+//                            EnableAsyncCompletion = true  // Supports background parsing
+//                            )]
+//[ProvideLanguageExtension(typeof(PuppetLanguageService), ".pp")]
 public sealed class PuppetLanguagePackagePackage : Package, IOleComponent
 {
 

@@ -6,7 +6,6 @@ Copyright (c) Microsoft Corporation. All rights reserved.
 
 namespace Puppet
 {
-    using System;
     using System.Collections.Generic;
 
     public struct Method

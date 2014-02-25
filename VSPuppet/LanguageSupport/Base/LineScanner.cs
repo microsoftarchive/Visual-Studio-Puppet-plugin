@@ -18,10 +18,12 @@ namespace Puppet
     public class LineScanner : IScanner
     {
         Puppet.ParserGenerator.IColorScan lex = null;
+        private PuppetLanguageService service;
 
-        public LineScanner()
+        public LineScanner(PuppetLanguageService service)
         {
             this.lex = new Puppet.Lexer.Scanner();
+            this.service = service;
         }
 
         public bool ScanTokenAndProvideInfoAboutIt(TokenInfo tokenInfo, ref int state)
@@ -32,10 +34,10 @@ namespace Puppet
             // !EOL and !EOF
             if (token != (int)Tokens.EOF)
             {
-                Configuration.TokenDefinition definition = Configuration.GetDefinition(token);
+                var definition = this.service.GetTokenDefinition(token);
                 tokenInfo.StartIndex = start;
                 tokenInfo.EndIndex = end;
-                tokenInfo.Color = definition.TokenColor;
+                tokenInfo.Color = (TokenColor)definition.TokenColor;
                 tokenInfo.Type = definition.TokenType;
                 tokenInfo.Trigger = definition.TokenTriggers;
                 tokenInfo.Token = token;
