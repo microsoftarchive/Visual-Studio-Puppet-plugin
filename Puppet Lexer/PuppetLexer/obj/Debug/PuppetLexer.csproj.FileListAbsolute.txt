@@ -1,0 +1,6 @@
+c:\users\deepak.nair\documents\visual studio 2012\Projects\PuppetLexer\PuppetLexer\obj\Debug\PuppetLexer.csprojResolveAssemblyReference.cache
+c:\Projects\Repos\MSOpenTech\puppet-vs\Puppet Lexer\PuppetLexer\bin\Debug\PuppetLexer.dll
+c:\Projects\Repos\MSOpenTech\puppet-vs\Puppet Lexer\PuppetLexer\bin\Debug\PuppetLexer.pdb
+c:\Projects\Repos\MSOpenTech\puppet-vs\Puppet Lexer\PuppetLexer\obj\Debug\PuppetLexer.csprojResolveAssemblyReference.cache
+c:\Projects\Repos\MSOpenTech\puppet-vs\Puppet Lexer\PuppetLexer\obj\Debug\PuppetLexer.dll
+c:\Projects\Repos\MSOpenTech\puppet-vs\Puppet Lexer\PuppetLexer\obj\Debug\PuppetLexer.pdb
