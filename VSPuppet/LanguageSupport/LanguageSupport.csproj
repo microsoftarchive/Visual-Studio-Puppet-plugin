@@ -121,6 +121,12 @@
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EditorClassifier\EditorClassifier.csproj">
+      <Project>{5589A3EA-548A-423C-B1B9-FFC152F13480}</Project>
+      <Name>EditorClassifier</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
     <ProjectReference Include="..\Template.Item\Template.Item.csproj">
       <Project>{51EC745B-20C0-4671-BB15-2C81F7686105}</Project>
       <Name>Template.Item</Name>

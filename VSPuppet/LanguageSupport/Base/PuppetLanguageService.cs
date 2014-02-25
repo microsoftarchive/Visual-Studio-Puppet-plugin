@@ -5,6 +5,7 @@ Copyright (c) Microsoft Corporation. All rights reserved.
 ***************************************************************************/
 
 
+
 namespace Puppet
 {
     using Microsoft.VisualStudio.Package;
@@ -13,6 +14,7 @@ namespace Puppet
     using System;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
+    using EditorClassifier;
 
 
     [Guid("90BECFDE-F4AF-4797-9519-2B5278CC18C5")]
@@ -28,7 +30,7 @@ namespace Puppet
 
         public enum PuppetTokenColor
         {
-            Defaul = 100,
+            Start = 100,
             Keyword,
             Identifier,
             String,
@@ -42,7 +44,7 @@ namespace Puppet
             Variable,
             Regex,
             Error,
-            Size = Error - Defaul
+            Size = Error - Start
         }
 
         public struct TokenDefinition
@@ -69,8 +71,6 @@ namespace Puppet
             {
                 definitions.Add(token, new TokenDefinition(type, color, trigger));
             }
-
-            //Configuration.Definitions[token] = new TokenDefinition(type, color, trigger);
         }
 
         public TokenDefinition GetTokenDefinition(int token)
@@ -105,19 +105,19 @@ namespace Puppet
 
         private void InitCustomColors()
         {
-            InitCustomColor(PuppetTokenColor.Keyword, "Keyword", "Puppet Keyword", COLORINDEX.CI_MAGENTA, COLORINDEX.CI_USERTEXT_BK);
-            InitCustomColor(PuppetTokenColor.Identifier, "Identifier", "Puppet Identifier", COLORINDEX.CI_BROWN, COLORINDEX.CI_USERTEXT_BK);
-            InitCustomColor(PuppetTokenColor.String, "String", "Puppet String", COLORINDEX.CI_DARKGREEN, COLORINDEX.CI_USERTEXT_BK);
-            InitCustomColor(PuppetTokenColor.Number, "Number", "Puppet Number", COLORINDEX.CI_RED, COLORINDEX.CI_USERTEXT_BK);
-            InitCustomColor(PuppetTokenColor.Text, "Text", "Puppet Text", COLORINDEX.CI_SYSPLAINTEXT_FG, COLORINDEX.CI_USERTEXT_BK);
-            InitCustomColor(PuppetTokenColor.Operator, "Operator", "Puppet Operator", COLORINDEX.CI_SYSPLAINTEXT_FG, COLORINDEX.CI_USERTEXT_BK);
-            InitCustomColor(PuppetTokenColor.Delimiter, "Delimiter", "Puppet Delimiter", COLORINDEX.CI_SYSPLAINTEXT_FG, COLORINDEX.CI_USERTEXT_BK);
-            InitCustomColor(PuppetTokenColor.BlockComment, "Comment", "Puppet Block Comment", COLORINDEX.CI_DARKGREEN, COLORINDEX.CI_USERTEXT_BK);
-            InitCustomColor(PuppetTokenColor.LineComment, "Comment", "Puppet Line Comment", COLORINDEX.CI_DARKGRAY, COLORINDEX.CI_USERTEXT_BK);
-            InitCustomColor(PuppetTokenColor.Variable, "Identifier", "Puppet Variable", COLORINDEX.CI_PURPLE, COLORINDEX.CI_USERTEXT_BK);
-            InitCustomColor(PuppetTokenColor.Regex, "Literal", "Puppet Regex", COLORINDEX.CI_MAROON, COLORINDEX.CI_USERTEXT_BK, false, false);
-            InitCustomColor(PuppetTokenColor.Classref, "Identifier", "Puppet Classref", COLORINDEX.CI_MAGENTA, COLORINDEX.CI_USERTEXT_BK, false, false);
-            InitCustomColor(PuppetTokenColor.Error, "Error", "Puppet Error", COLORINDEX.CI_RED, COLORINDEX.CI_USERTEXT_BK, false, false);
+            InitCustomColor(PuppetTokenColor.Keyword, Constants.KeywordName, Constants.KeywordDisplayName, COLORINDEX.CI_MAGENTA, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Identifier, Constants.IdentifierName, Constants.IdentifierDisplayName, COLORINDEX.CI_BROWN, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.String, Constants.StringName, Constants.StringDisplayName, COLORINDEX.CI_DARKGREEN, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Number, Constants.NumberName, Constants.NumberDisplayName, COLORINDEX.CI_RED, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Text, Constants.TextName, Constants.TextDisplayName, COLORINDEX.CI_SYSPLAINTEXT_FG, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Operator, Constants.OperatorName, Constants.OperatorDisplayName, COLORINDEX.CI_SYSPLAINTEXT_FG, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Delimiter, Constants.DelimiterName, Constants.DelimiterDisplayName, COLORINDEX.CI_SYSPLAINTEXT_FG, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.BlockComment, Constants.BlockCommentName, Constants.BlockCommentDisplayName, COLORINDEX.CI_DARKGREEN, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.LineComment, Constants.LineCommentName, Constants.LineCommentDisplayName, COLORINDEX.CI_DARKGRAY, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Variable, Constants.VariableName, Constants.VariableDisplayName, COLORINDEX.CI_PURPLE, COLORINDEX.CI_USERTEXT_BK);
+            InitCustomColor(PuppetTokenColor.Regex, Constants.RegexName, Constants.RegexDisplayName, COLORINDEX.CI_MAROON, COLORINDEX.CI_USERTEXT_BK, false, false);
+            InitCustomColor(PuppetTokenColor.Classref, Constants.ClassrefName, Constants.BlockCommentDisplayName, COLORINDEX.CI_MAGENTA, COLORINDEX.CI_USERTEXT_BK, false, false);
+            InitCustomColor(PuppetTokenColor.Error, Constants.ErrorName, Constants.ErrorDisplayName, COLORINDEX.CI_RED, COLORINDEX.CI_USERTEXT_BK, false, false);
 
             if ((int)PuppetTokenColor.Size != ColorableItems.Count)
             {
@@ -153,6 +153,7 @@ namespace Puppet
             AddTokenDefinition((int)Tokens.COMMA, TokenType.Operator, PuppetTokenColor.Delimiter, TokenTriggers.None);
             
             AddTokenDefinition((int)Tokens.EQUALS, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
+            AddTokenDefinition((int)Tokens.DIV, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
             AddTokenDefinition((int)Tokens.APPENDS, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
             AddTokenDefinition((int)Tokens.DELETES, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
             AddTokenDefinition((int)Tokens.ISEQUAL, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
