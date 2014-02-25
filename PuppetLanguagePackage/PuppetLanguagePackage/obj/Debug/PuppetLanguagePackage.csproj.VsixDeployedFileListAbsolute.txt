@@ -1,4 +1,0 @@
-C:\Users\v-vlshch\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\Microsoft\PuppetLanguagePackage\1.0\\PuppetLanguagePackage.dll
-C:\Users\v-vlshch\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\Microsoft\PuppetLanguagePackage\1.0\\PuppetLanguagePackage.pkgdef
-C:\Users\v-vlshch\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\Microsoft\PuppetLanguagePackage\1.0\\extension.vsixmanifest
-C:\Users\v-vlshch\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\Microsoft\PuppetLanguagePackage\1.0\\PuppetLanguagePackage.pdb

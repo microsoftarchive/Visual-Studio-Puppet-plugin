@@ -1,5 +1,0 @@
-C:\Projects\PuppetLanguage.Templates\PuppetLanguage.ProjectTemplete.VSIX\obj\Debug\PuppetLanguage.ProjectTemplete.VSIX.dll
-C:\Projects\PuppetLanguage.Templates\PuppetLanguage.ProjectTemplete.VSIX\obj\Debug\PuppetLanguage.ProjectTemplete.VSIX.pdb
-C:\Projects\PuppetLanguage.Templates\PuppetLanguage.ProjectTemplete.VSIX\obj\Debug\extension.vsixmanifest
-C:\Projects\PuppetLanguage.Templates\PuppetLanguage.ProjectTemplete.VSIX\bin\Debug\PuppetLanguage.ProjectTemplete.VSIX.vsix
-C:\Projects\PuppetLanguage.Templates\PuppetLanguage.ProjectTemplete.VSIX\bin\Debug\extension.vsixmanifest

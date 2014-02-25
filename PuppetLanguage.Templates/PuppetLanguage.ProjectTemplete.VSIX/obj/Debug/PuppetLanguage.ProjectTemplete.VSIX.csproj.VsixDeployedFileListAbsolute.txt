@@ -1,3 +1,0 @@
-C:\Users\v-vlshch\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\MsOpenTech\PuppetLanguage.ProjectTemplete.VSIX\1.0\\extension.vsixmanifest
-C:\Users\v-vlshch\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\MsOpenTech\PuppetLanguage.ProjectTemplete.VSIX\1.0\ItemTemplates\CSharp\\1033\PuppetLanguage.ItemTemplate.Example.zip
-C:\Users\v-vlshch\AppData\Local\Microsoft\VisualStudio\12.0Exp\Extensions\MsOpenTech\PuppetLanguage.ProjectTemplete.VSIX\1.0\ProjectTemplates\CSharp\\1033\PuppetLanguage.ProjectTemplate.zip
