@@ -18,6 +18,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Item", "Template.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorClassifier", "EditorClassifier\EditorClassifier.csproj", "{5589A3EA-548A-423C-B1B9-FFC152F13480}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BraceMatching", "BraceMatching\BraceMatching.csproj", "{44B7BD48-1865-4BB5-9D5A-89AC65F07DE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HighlightWord", "HighlightWord\HighlightWord.csproj", "{45173DA3-04B1-48F5-ACEC-A8F5042FDBCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,14 @@ Global
 		{5589A3EA-548A-423C-B1B9-FFC152F13480}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5589A3EA-548A-423C-B1B9-FFC152F13480}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5589A3EA-548A-423C-B1B9-FFC152F13480}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44B7BD48-1865-4BB5-9D5A-89AC65F07DE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44B7BD48-1865-4BB5-9D5A-89AC65F07DE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44B7BD48-1865-4BB5-9D5A-89AC65F07DE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44B7BD48-1865-4BB5-9D5A-89AC65F07DE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45173DA3-04B1-48F5-ACEC-A8F5042FDBCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45173DA3-04B1-48F5-ACEC-A8F5042FDBCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45173DA3-04B1-48F5-ACEC-A8F5042FDBCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45173DA3-04B1-48F5-ACEC-A8F5042FDBCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

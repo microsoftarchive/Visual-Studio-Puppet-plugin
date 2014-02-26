@@ -14,184 +14,158 @@ namespace EditorClassifier
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.KeywordName)]
     [UserVisible(true)]
-    class KeywordFormatDefinition : MarkerFormatDefinition
+    class KeywordFormatDefinition : ClassificationFormatDefinition
     {
         public KeywordFormatDefinition()
         {
-            //this.BackgroundColor = COLORINDEX.CI_USERTEXT_BK;
             this.ForegroundColor = Colors.Blue;
             this.DisplayName = Constants.KeywordDisplayName;
-            this.ZOrder = 5;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.IdentifierName)]
     [UserVisible(true)]
-    class IdentifierFormatDefinition : MarkerFormatDefinition
+    class IdentifierFormatDefinition : ClassificationFormatDefinition
     {
         public IdentifierFormatDefinition()
         {
-            //this.BackgroundColor = Colors.LightBlue;
-            this.ForegroundColor = Colors.LightSeaGreen;
+            this.ForegroundColor = Colors.Black;
             this.DisplayName = Constants.IdentifierDisplayName;
-            this.ZOrder = 5;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.StringName)]
     [UserVisible(true)]
-    class StringFormatDefinition : MarkerFormatDefinition
+    class StringFormatDefinition : ClassificationFormatDefinition
     {
         public StringFormatDefinition()
         {
-            //this.BackgroundColor = Colors.LightBlue;
-            this.ForegroundColor = Colors.Red;
+            this.ForegroundColor = Colors.Green;
             this.DisplayName = Constants.StringDisplayName;
-            this.ZOrder = 5;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.NumberName)]
     [UserVisible(true)]
-    class NumberFormatDefinition : MarkerFormatDefinition
+    class NumberFormatDefinition : ClassificationFormatDefinition
     {
         public NumberFormatDefinition()
         {
-            //this.BackgroundColor = Colors.LightBlue;
-            this.ForegroundColor = Colors.DarkOrange;
+            this.ForegroundColor = Colors.Red;
             this.DisplayName = Constants.NumberDisplayName;
-            this.ZOrder = 5;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.TextName)]
     [UserVisible(true)]
-    class TextFormatDefinition : MarkerFormatDefinition
+    class TextFormatDefinition : ClassificationFormatDefinition
     {
         public TextFormatDefinition()
         {
-            //this.BackgroundColor = Colors.LightBlue;
             this.ForegroundColor = Colors.Black;
             this.DisplayName = Constants.TextDisplayName;
-            this.ZOrder = 5;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.OperatorName)]
     [UserVisible(true)]
-    class OperatorFormatDefinition : MarkerFormatDefinition
+    class OperatorFormatDefinition : ClassificationFormatDefinition
     {
         public OperatorFormatDefinition()
         {
-            //this.BackgroundColor = Colors.DarkTurquoise;
-            this.ForegroundColor = Colors.Peru;
+            this.ForegroundColor = Colors.Blue;
             this.DisplayName = Constants.OperatorDisplayName;
-            this.ZOrder = 5;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.DelimiterName)]
     [UserVisible(true)]
-    class DelimiterFormatDefinition : MarkerFormatDefinition
+    class DelimiterFormatDefinition : ClassificationFormatDefinition
     {
         public DelimiterFormatDefinition()
         {
-            //this.BackgroundColor = Colors.DarkBlue;
             this.ForegroundColor = Colors.Blue;
             this.DisplayName = Constants.DelimiterDisplayName;
-            this.ZOrder = 5;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.ClassrefName)]
     [UserVisible(true)]
-    class ClassrefFormatDefinition : MarkerFormatDefinition
+    class ClassrefFormatDefinition : ClassificationFormatDefinition
     {
         public ClassrefFormatDefinition()
         {
-            //this.BackgroundColor = Colors.LightBlue;
             this.ForegroundColor = Colors.MediumOrchid;
             this.DisplayName = Constants.ClassrefDisplayName;
-            this.ZOrder = 5;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.BlockCommentName)]
     [UserVisible(true)]
-    class BlockCommentFormatDefinition : MarkerFormatDefinition
+    class BlockCommentFormatDefinition : ClassificationFormatDefinition
     {
         public BlockCommentFormatDefinition()
         {
-            //this.BackgroundColor = Colors.LightBlue;
             this.ForegroundColor = Colors.Green;
             this.DisplayName = Constants.BlockCommentDisplayName;
-            this.ZOrder = 5;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.LineCommentName)]
     [UserVisible(true)]
-    class LineCommentFormatDefinition : MarkerFormatDefinition
+    class LineCommentFormatDefinition : ClassificationFormatDefinition
     {
         public LineCommentFormatDefinition()
         {
-            //this.BackgroundColor = Colors.LightBlue;
             this.ForegroundColor = Colors.DarkGray;
             this.DisplayName = Constants.LineCommentDisplayName;
-            this.ZOrder = 5;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.VariableName)]
     [UserVisible(true)]
-    class VariableFormatDefinition : MarkerFormatDefinition
+    class VariableFormatDefinition : ClassificationFormatDefinition
     {
         public VariableFormatDefinition()
         {
-            //this.BackgroundColor = Colors.LightBlue;
-            this.ForegroundColor = Colors.LightBlue;
+            this.ForegroundColor = Colors.Goldenrod;
             this.DisplayName = Constants.VariableDisplayName;
-            this.ZOrder = 5;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.RegexName)]
     [UserVisible(true)]
-    class RegexFormatDefinition : MarkerFormatDefinition
+    class RegexFormatDefinition : ClassificationFormatDefinition
     {
         public RegexFormatDefinition()
         {
-            //this.BackgroundColor = Colors.LightBlue;
-            this.ForegroundColor = Colors.Salmon;
+            this.ForegroundColor = Colors.Brown;
             this.DisplayName = Constants.RegexDisplayName;
-            this.ZOrder = 5;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.ErrorName)]
     [UserVisible(true)]
-    class ErrorFormatDefinition : MarkerFormatDefinition
+    class ErrorFormatDefinition : ClassificationFormatDefinition
     {
         public ErrorFormatDefinition()
         {
-            //this.BackgroundColor = Colors.LightBlue;
-            this.ForegroundColor = Colors.Crimson;
+            this.ForegroundColor = Colors.Red;
+            this.IsItalic = true;
+            this.IsBold = true;
             this.DisplayName = Constants.ErrorDisplayName;
-            this.ZOrder = 5;
         }
     }
-
-
 }

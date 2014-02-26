@@ -9,7 +9,7 @@ namespace EditorClassifier
     public static class Constants
     {
         public const string KeywordName = "puppet.keyword";
-        public const string KeywordDisplayName = "Puppet keyword";
+        public const string KeywordDisplayName = "Puppet Keyword";
 
         public const string IdentifierName = "puppet.identifier";
         public const string IdentifierDisplayName = "Puppet Identifier";
@@ -17,7 +17,7 @@ namespace EditorClassifier
         public const string StringName = "puppet.string";
         public const string StringDisplayName = "Puppet String";
 
-        public const string NumberName = "puppet.sumber";
+        public const string NumberName = "puppet.number";
         public const string NumberDisplayName = "Puppet Number";
 
         public const string TextName = "puppet.text";
@@ -30,13 +30,13 @@ namespace EditorClassifier
         public const string DelimiterDisplayName = "Puppet Delimiter";
 
         public const string ClassrefName = "puppet.classref";
-        public const string ClassrefDisplayName = "Puppet Classref";
+        public const string ClassrefDisplayName = "Puppet Class Reference";
 
         public const string BlockCommentName = "puppet.blockComment";
-        public const string BlockCommentDisplayName = "Puppet BlockComment";
+        public const string BlockCommentDisplayName = "Puppet Block Comment";
 
         public const string LineCommentName = "puppet.lineComment";
-        public const string LineCommentDisplayName = "Puppet LineCommentd";
+        public const string LineCommentDisplayName = "Puppet Line Comment";
 
         public const string VariableName = "puppet.variable";
         public const string VariableDisplayName = "Puppet Variable";
