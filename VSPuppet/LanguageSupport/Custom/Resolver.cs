@@ -6,9 +6,9 @@ Copyright (c) Microsoft Corporation. All rights reserved.
 
 namespace Puppet
 {
-    using System;
+    using Microsoft.VisualStudio.Package;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Linq;
 
     public class Resolver : IASTResolver
     {
@@ -16,19 +16,14 @@ namespace Puppet
 
         public IList<Declaration> FindCompletions(object result, int line, int col)
         {
-            var declarations = new List<Declaration>();
-
             var text = result.ToString();
 
-            foreach (var kw in Lexer.Scanner.Keywords)
-            {
-                if (kw.Key.StartsWith(text))
-                {
-                    declarations.Add(new Declaration("", kw.Key, 5, kw.Key));
-                }
-            }
-
-            return declarations;
+            return (
+                from kw in Lexer.Scanner.TokenDescMap.Where(td => td.Value.TokenType == TokenType.Keyword) 
+                where kw.Key.StartsWith(text)
+                orderby kw.Key
+                select new Declaration("", kw.Key, 5, kw.Key)
+                ).ToList();
         }
 
         public IList<Declaration> FindMembers(object result, int line, int col)

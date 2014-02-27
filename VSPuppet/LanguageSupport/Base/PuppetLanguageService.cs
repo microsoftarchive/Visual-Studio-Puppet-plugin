@@ -15,6 +15,7 @@ namespace Puppet
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
     using EditorClassifier;
+    using System.Linq;
 
 
     [Guid("90BECFDE-F4AF-4797-9519-2B5278CC18C5")]
@@ -127,13 +128,22 @@ namespace Puppet
 
         private void AddTokenDefinitions()
         {
-            foreach (var kw in Lexer.Scanner.Keywords)
+            foreach (var td in Lexer.Scanner.TokenDescMap.Where(td => td.Value.TokenType == TokenType.Keyword))
             {
-                AddTokenDefinition((int)kw.Value, TokenType.Keyword, PuppetTokenColor.Keyword, TokenTriggers.None);
+                AddTokenDefinition((int)td.Value.Token, td.Value.TokenType, PuppetTokenColor.Keyword, TokenTriggers.None);
+            }
+
+            foreach (var td in Lexer.Scanner.TokenDescMap.Where(td => td.Value.TokenType == TokenType.Operator))
+            {
+                AddTokenDefinition((int)td.Value.Token, td.Value.TokenType, PuppetTokenColor.Operator, TokenTriggers.None);
+            }
+
+            foreach (var td in Lexer.Scanner.TokenDescMap.Where(td => td.Value.TokenType == TokenType.Delimiter))
+            {
+                AddTokenDefinition((int)td.Value.Token, td.Value.TokenType, PuppetTokenColor.Delimiter, TokenTriggers.None);
             }
 
             AddTokenDefinition((int)Tokens.NUMBER, TokenType.Literal, PuppetTokenColor.Number, TokenTriggers.None);
-
             AddTokenDefinition((int)Tokens.STRING, TokenType.String, PuppetTokenColor.String, TokenTriggers.None);
             AddTokenDefinition((int)Tokens.VARIABLE, TokenType.Identifier, PuppetTokenColor.Variable, TokenTriggers.None);
             AddTokenDefinition((int)Tokens.CLASSREF, TokenType.Identifier, PuppetTokenColor.Classref, TokenTriggers.None);
@@ -142,54 +152,7 @@ namespace Puppet
             AddTokenDefinition((int)Tokens.BL_COMMENT, TokenType.Comment, PuppetTokenColor.BlockComment, TokenTriggers.None);
             AddTokenDefinition((int)Tokens.LN_COMMENT, TokenType.LineComment, PuppetTokenColor.LineComment, TokenTriggers.None);
 
-            AddTokenDefinition((int)Tokens.LBRACK, TokenType.Delimiter, PuppetTokenColor.Delimiter, TokenTriggers.MatchBraces);
-            AddTokenDefinition((int)Tokens.RBRACK, TokenType.Delimiter, PuppetTokenColor.Delimiter, TokenTriggers.MatchBraces);
-            AddTokenDefinition((int)Tokens.LBRACE, TokenType.Delimiter, PuppetTokenColor.Delimiter, TokenTriggers.MatchBraces);
-            AddTokenDefinition((int)Tokens.RBRACE, TokenType.Delimiter, PuppetTokenColor.Delimiter, TokenTriggers.MatchBraces);
-            AddTokenDefinition((int)Tokens.LPAREN, TokenType.Delimiter, PuppetTokenColor.Delimiter, TokenTriggers.MatchBraces);
-            AddTokenDefinition((int)Tokens.RPAREN, TokenType.Delimiter, PuppetTokenColor.Delimiter, TokenTriggers.MatchBraces);
-
-            AddTokenDefinition((int)Tokens.COLON, TokenType.Operator, PuppetTokenColor.Delimiter, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.COMMA, TokenType.Operator, PuppetTokenColor.Delimiter, TokenTriggers.None);
-            
-            AddTokenDefinition((int)Tokens.EQUALS, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.DIV, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.APPENDS, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.DELETES, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.ISEQUAL, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.NOTEQUAL, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.MATCH, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.NOMATCH, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.GREATEREQUAL, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.GREATERTHAN, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.LESSEQUAL, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.LESSTHAN, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.FARROW, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.PARROW, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.LSHIFT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.LLCOLLECT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.LCOLLECT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.RSHIFT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.RRCOLLECT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.RCOLLECT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.PLUS, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.MINUS, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.TIMES, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.MODULO, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.NOT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.DOT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.PIPE, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.AT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.ATAT, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.SEMIC, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.QMARK, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.TILDE, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.IN_EDGE, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.IN_EDGE_SUB, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.OUT_EDGE, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-            AddTokenDefinition((int)Tokens.OUT_EDGE_SUB, TokenType.Operator, PuppetTokenColor.Operator, TokenTriggers.None);
-
-            //// Extra token values internal to the scanner
+            // Extra token values internal to the scanner
             AddTokenDefinition((int)Tokens.LEX_ERROR, TokenType.Text, PuppetTokenColor.Error, TokenTriggers.None);
         }
 

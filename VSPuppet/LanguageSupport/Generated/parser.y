@@ -344,7 +344,6 @@ selector_entry_list
 
 selector_entry
     : expression FARROW expression
-    | expression FARROW error                           { CallHdlr("selector_entry: expression expected", @3); }
     ;
 
 // ---RESOURCE
@@ -567,20 +566,14 @@ variable
 
 array
     : LBRACK expressions            RBRACK          { Match(@1, @3);}
-    | LBRACK expressions            error           { CallHdlr("unmatched bracket", @3); }
     | LBRACK expressions COMMA      RBRACK          { Match(@1, @4);}
-    | LBRACK expressions COMMA      error           { CallHdlr("unmatched bracket", @4); }
     | LBRACK                        RBRACK          { Match(@1, @2);}
-    | LBRACK                        error           { CallHdlr("unmatched bracket", @2); }
     ;
     
 hash
     : LBRACE hashpairs RBRACE           { Match(@1, @3);}
-    | LBRACE hashpairs error            { CallHdlr("unmatched brace", @3);}
     | LBRACE hashpairs COMMA RBRACE     { Match(@1, @4);}
-    | LBRACE hashpairs COMMA error      { CallHdlr("unmatched brace", @4);}
     | LBRACE RBRACE                     { Match(@1, @2);}
-    | LBRACE RBRACE                     { CallHdlr("unmatched brace", @2);}
     ;
 
 hashpairs
