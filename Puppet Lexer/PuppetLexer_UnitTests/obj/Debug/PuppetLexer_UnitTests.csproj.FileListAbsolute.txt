@@ -1,7 +1,0 @@
-C:\Projects\Repos\MSOpenTech\puppet-vs\Puppet Lexer\PuppetLexer_UnitTests\bin\Debug\PuppetLexer_UnitTests.dll
-C:\Projects\Repos\MSOpenTech\puppet-vs\Puppet Lexer\PuppetLexer_UnitTests\bin\Debug\PuppetLexer_UnitTests.pdb
-C:\Projects\Repos\MSOpenTech\puppet-vs\Puppet Lexer\PuppetLexer_UnitTests\bin\Debug\PuppetLexer.dll
-C:\Projects\Repos\MSOpenTech\puppet-vs\Puppet Lexer\PuppetLexer_UnitTests\bin\Debug\PuppetLexer.pdb
-C:\Projects\Repos\MSOpenTech\puppet-vs\Puppet Lexer\PuppetLexer_UnitTests\obj\Debug\PuppetLexer_UnitTests.csprojResolveAssemblyReference.cache
-C:\Projects\Repos\MSOpenTech\puppet-vs\Puppet Lexer\PuppetLexer_UnitTests\obj\Debug\PuppetLexer_UnitTests.dll
-C:\Projects\Repos\MSOpenTech\puppet-vs\Puppet Lexer\PuppetLexer_UnitTests\obj\Debug\PuppetLexer_UnitTests.pdb
