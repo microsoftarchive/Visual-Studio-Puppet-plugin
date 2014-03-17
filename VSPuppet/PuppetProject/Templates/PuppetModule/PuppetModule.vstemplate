@@ -1,0 +1,22 @@
+﻿<VSTemplate Version="3.0.0" Type="Project"
+    xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>PuppetModule</Name>
+    <Description>Creates a Puppet Module For Puppet Forge</Description>
+    <Icon>PuppetModule.ico</Icon>
+    <ProjectType>PuppetLab</ProjectType>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="PuppetModule.ppm" ReplaceParameters="true">
+      <ProjectItem TargetFileName="manifests\manifest.pp" OpenInEditor="true" OpenOrder ="1" >manifest.pp</ProjectItem>
+      <ProjectItem TargetFileName="tests\manifest_test.pp" OpenInEditor="true" OpenOrder ="2" >manifest_test.pp</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="false">Modulefile</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true" OpenOrder ="3" >README</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>ProjectWizard, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=4c5e12a4ddf66b05</Assembly>
+    <FullClassName>ProjectWizard.Wizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

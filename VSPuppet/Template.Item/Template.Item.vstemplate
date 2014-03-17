@@ -2,10 +2,10 @@
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
     <Name>Puppet Manifest</Name>
-    <Description>Puppet Manifest</Description>
+    <Description>Creates a new Puppet Manifest</Description>
     <Icon>Template.Item.ico</Icon>
     <TemplateID>ee546c02-2b2a-4834-86f0-5583ea8c33a9</TemplateID>
-    <ProjectType>CSharp</ProjectType>
+    <ProjectType>PuppetLab</ProjectType>
     <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
     <DefaultName>manifest.pp</DefaultName>
