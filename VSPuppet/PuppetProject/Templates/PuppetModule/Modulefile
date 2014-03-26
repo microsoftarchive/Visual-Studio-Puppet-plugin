@@ -1,6 +1,0 @@
-﻿#This file is genetated by Visual Studio Automatically
-name '$forgeusername$-$forgemodulename$'
-version '$forgemoduleversion$'
-dependency $forgemoduledependency$
-summary "$forgemodulesummary$"
-description "$forgemoduledescription$"

@@ -1,4 +1,11 @@
-﻿
+﻿// *********************************************************************************
+// 
+//     Microsoft Open Tech 
+//     VSPuppet
+//     Created by Vlad Shcherbakov (Akvelon)  03 2014
+// 
+// *********************************************************************************
+
 namespace ProjectWizard
 {
     using EnvDTE;
@@ -9,7 +16,6 @@ namespace ProjectWizard
     class Wizard : IWizard
     {
         private string forgeUserName;
-        private string forgeUserPassword = "UNSUPPORTED";
         private string forgeModuleName;
         private string forgeModuleVersion;
         private string forgeModuleDependency;
@@ -29,7 +35,6 @@ namespace ProjectWizard
             if (puppetProjectNode != null)
             {
                 puppetProjectNode.ProjectMgr.SetProjectProperty(Conatants.PuppetForgeUserName, this.forgeUserName);
-                puppetProjectNode.ProjectMgr.SetProjectProperty(Conatants.PuppetForgeUserPassword, this.forgeUserPassword);
                 puppetProjectNode.ProjectMgr.SetProjectProperty(Conatants.PuppetForgeModuleName, this.forgeModuleName);
                 puppetProjectNode.ProjectMgr.SetProjectProperty(Conatants.PuppetForgeModuleVersion, this.forgeModuleVersion);
                 puppetProjectNode.ProjectMgr.SetProjectProperty(Conatants.PuppetForgeModuleDependency, this.forgeModuleDependency);
@@ -62,54 +67,54 @@ namespace ProjectWizard
             replacementsDictionary.TryGetValue("$username$", out defaultForgeUsername);
             if (!string.IsNullOrEmpty(defaultForgeUsername))
             {
-                mainWindow.UserName = defaultForgeUsername;
+                mainWindow.viewModel.UserName = defaultForgeUsername;
             }
 
             string defaultForgeModulename;
             replacementsDictionary.TryGetValue("$safeprojectname$", out defaultForgeModulename);
             if (!string.IsNullOrEmpty(defaultForgeModulename))
             {
-                mainWindow.ModuleName = defaultForgeModulename;
+                mainWindow.viewModel.ModuleName = defaultForgeModulename;
             }
 
             var dr = mainWindow.ShowDialog();
 
             if (dr.HasValue && dr.Value)
             {
-                this.forgeUserName = 
-                    string.IsNullOrEmpty(mainWindow.UserName)
+                this.forgeUserName =
+                    string.IsNullOrEmpty(mainWindow.viewModel.UserName)
                         ? !string.IsNullOrEmpty(defaultForgeUsername) ? defaultForgeUsername : UNKNOWN
-                        : mainWindow.UserName;
+                        : mainWindow.viewModel.UserName;
                 replacementsDictionary.Add("$forgeusername$", this.forgeUserName);
 
                 this.forgeModuleName =
-                    string.IsNullOrEmpty(mainWindow.ModuleName)
+                    string.IsNullOrEmpty(mainWindow.viewModel.ModuleName)
                         ? !string.IsNullOrEmpty(defaultForgeModulename) ? defaultForgeModulename : UNKNOWN
-                        : mainWindow.ModuleName;
+                        : mainWindow.viewModel.ModuleName;
                 replacementsDictionary.Add("$forgemodulename$", this.forgeModuleName);
 
-                this.forgeModuleVersion = 
-                    string.IsNullOrEmpty(mainWindow.Version)
+                this.forgeModuleVersion =
+                    string.IsNullOrEmpty(mainWindow.viewModel.Version)
                         ? "0.0.1"
-                        : mainWindow.Version;
+                        : mainWindow.viewModel.Version;
                 replacementsDictionary.Add("$forgemoduleversion$", this.forgeModuleVersion);
 
-                this.forgeModuleDependency = 
-                    string.IsNullOrEmpty(mainWindow.Dependency)
+                this.forgeModuleDependency =
+                    string.IsNullOrEmpty(mainWindow.viewModel.Dependency)
                         ? string.Empty
-                        : mainWindow.Dependency;
+                        : mainWindow.viewModel.Dependency;
                 replacementsDictionary.Add("$forgemoduledependency$", this.forgeModuleDependency);
 
-                this.forgeModuleSummary = 
-                    string.IsNullOrEmpty(mainWindow.Summary)
+                this.forgeModuleSummary =
+                    string.IsNullOrEmpty(mainWindow.viewModel.Summary)
                         ? string.Empty
-                        : mainWindow.Summary;
+                        : mainWindow.viewModel.Summary;
                 replacementsDictionary.Add("$forgemodulesummary$", this.forgeModuleSummary);
                 
                 this.forgeModuleDescription =
-                    string.IsNullOrEmpty(mainWindow.Description)
+                    string.IsNullOrEmpty(mainWindow.viewModel.Description)
                         ? string.Empty
-                        : mainWindow.Description;
+                        : mainWindow.viewModel.Description;
                 replacementsDictionary.Add("$forgemoduledescription$", this.forgeModuleDescription);
             }
             else

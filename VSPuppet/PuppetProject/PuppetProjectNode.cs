@@ -1,4 +1,11 @@
-﻿
+﻿// *********************************************************************************
+// 
+//     Microsoft Open Tech 
+//     VSPuppet
+//     Created by Vlad Shcherbakov (Akvelon)  03 2014
+// 
+// *********************************************************************************
+
 namespace MicrosoftOpenTech.PuppetProject
 {
     using Microsoft.VisualStudio;
@@ -10,12 +17,11 @@ namespace MicrosoftOpenTech.PuppetProject
     using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
     using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
 
-
     public class PuppetProjectNode : ProjectNode
     {
         private PuppetProjectPackage package;
 
-        private static ImageList imageList;
+        private static readonly ImageList imageList;
 
         internal static int imageIndex;
         public override int ImageIndex
@@ -25,13 +31,6 @@ namespace MicrosoftOpenTech.PuppetProject
 
         static PuppetProjectNode()
         {
-
-            var ass = typeof (PuppetProjectNode).Assembly;
-            var rm = ass.GetManifestResourceNames();
-            var rs = ass.GetManifestResourceStream("MicrosoftOpenTech.PuppetProject.Resources.PuppetProjectNode.bmp");
-            var imList = Utilities.GetImageList(rs);
-
-
             try
             {
                 imageList = Utilities
@@ -41,23 +40,23 @@ namespace MicrosoftOpenTech.PuppetProject
             }
             catch
             {
-                Debug.WriteLine("Cant get resource");
+                Debug.WriteLine("Can't get resource");
                 throw;
             }
 
             if(null == imageList)
-                Debug.WriteLine("Cant get bitmap");
+                Debug.WriteLine("Can't get bitmap");
         }
 
         public PuppetProjectNode(PuppetProjectPackage package)
         {
             this.package = package;
 
-            imageIndex = this.ImageHandler.ImageList.Images.Count;
+            imageIndex = ImageHandler.ImageList.Images.Count;
 
             foreach (Image img in imageList.Images)
             {
-                this.ImageHandler.AddImage(img);
+                ImageHandler.AddImage(img);
             }
         }
 
@@ -94,13 +93,22 @@ namespace MicrosoftOpenTech.PuppetProject
                     case VsCommands.Copy:
                     case VsCommands.Paste:
                     case VsCommands.Cut:
+                    case VsCommands.Save:
+                    case VsCommands.SaveAs:
                     case VsCommands.Rename:
                     case VsCommands.ProjectSettings:
                     case VsCommands.PropSheetOrProperties:
+                    case VsCommands.Exit:
+                    case VsCommands.CloseAllDocuments:
+                    case VsCommands.CloseSolution:
+                    case VsCommands.FileClose:
+                    case VsCommands.SaveSolution:
+                    case VsCommands.SaveProjectItem:
+                    case VsCommands.SaveOptions:
                         result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
                         return VSConstants.S_OK;
                     case VsCommands.ViewForm:
-                        if (this.HasDesigner)
+                        if (HasDesigner)
                         {
                             result |= QueryStatusResult.SUPPORTED | QueryStatusResult.ENABLED;
                             return VSConstants.S_OK;

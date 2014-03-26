@@ -65,10 +65,17 @@
         <Parent guid="guidPuppetProjectCmdSet" id="PuppetModuleMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>Create Puppet Forge Module</ButtonText>
+          <ButtonText>Create A Tarball And Save Locally</ButtonText>
         </Strings>
       </Button>
 
+      <Button guid="guidPuppetProjectCmdSet" id="cmdidUploadPuppetForgeModule" priority="0x0100" type="Button">
+        <Parent guid="guidPuppetProjectCmdSet" id="PuppetModuleMenuGroup" />
+        <Icon guid="guidImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Create A Tarball And Upload To The Puppet Forge</ButtonText>
+        </Strings>
+      </Button>
 
       <Button guid="guidPuppetProjectCmdSet" id="cmdidPuppetForgeWindow" priority="0x0100" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
@@ -97,10 +104,15 @@
     <CommandPlacement guid="guidPuppetProjectCmdSet" id="cmdidCreatePuppetForgeModule" priority="0x0300">
       <Parent guid="guidPuppetProjectCmdSet" id="PuppetModuleContextMenuGroup"/>
     </CommandPlacement>
+    <CommandPlacement guid="guidPuppetProjectCmdSet" id="cmdidUploadPuppetForgeModule" priority="0x0300">
+      <Parent guid="guidPuppetProjectCmdSet" id="PuppetModuleContextMenuGroup"/>
+    </CommandPlacement>
   </CommandPlacements>
 
   <VisibilityConstraints>
     <VisibilityItem guid="guidPuppetProjectCmdSet" id="cmdidCreatePuppetForgeModule" 
+                    context="UICONTEXT_SolutionHasSingleProject" />
+    <VisibilityItem guid="guidPuppetProjectCmdSet" id="cmdidUploadPuppetForgeModule" 
                     context="UICONTEXT_SolutionHasSingleProject" />
   </VisibilityConstraints>
 
@@ -113,6 +125,7 @@
 
       <IDSymbol name="PuppetModuleMenuGroup" value="0x1020" />
       <IDSymbol name="cmdidCreatePuppetForgeModule" value="0x0100" />
+      <IDSymbol name="cmdidUploadPuppetForgeModule" value="0x0104" />
       <IDSymbol name="cmdidPuppetForgeWindow" value="0x0101" />
       <IDSymbol name="PuppetModuleContextMenuGroup" value="0x0102" />
     </GuidSymbol>

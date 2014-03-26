@@ -1,4 +1,12 @@
-﻿namespace MicrosoftOpenTech.PuppetProject
+﻿// *********************************************************************************
+// 
+//     Microsoft Open Tech 
+//     VSPuppet
+//     Created by Vlad Shcherbakov (Akvelon)  03 2014
+// 
+// *********************************************************************************
+
+namespace MicrosoftOpenTech.PuppetProject
 {
     using Microsoft.VisualStudio;
     using Microsoft.VisualStudio.Project;
@@ -11,7 +19,6 @@
     public class GeneralPropertyPage : SettingsPage
     {
         private string forgeUserName;
-        private string forgeUserPassword;
         private string forgeModuleName;
         private string forgeModuleVersion;
         private string forgeModuleDependency;
@@ -32,20 +39,6 @@
             set
             {
                 this.forgeUserName = value;
-                this.IsDirty = true;
-            }
-        }
-
-        [Category(Conatants.PuppetForgeAccountProperties)]
-        [DisplayName("User Password")]
-        [PasswordPropertyText(true)]
-        [Description("Puppet Forge Account Password.")]
-        public string ForgeUserPassword
-        {
-            get { return this.forgeUserPassword; }
-            set
-            {
-                this.forgeUserPassword = value;
                 this.IsDirty = true;
             }
         }
@@ -118,7 +111,6 @@
         protected override void BindProperties()
         {
             this.forgeUserName = this.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeUserName, true);
-            this.forgeUserPassword = this.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeUserPassword, true);
             this.forgeModuleName = this.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleName, true);
             this.forgeModuleVersion = this.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleVersion, true);
             this.forgeModuleDependency = this.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleDependency, true);
@@ -129,7 +121,6 @@
         protected override int ApplyChanges()
         {
             this.ProjectMgr.SetProjectProperty(Conatants.PuppetForgeUserName, this.forgeUserName);
-            this.ProjectMgr.SetProjectProperty(Conatants.PuppetForgeUserPassword, this.forgeUserPassword);
             this.ProjectMgr.SetProjectProperty(Conatants.PuppetForgeModuleName, this.forgeModuleName);
             this.ProjectMgr.SetProjectProperty(Conatants.PuppetForgeModuleVersion, this.forgeModuleVersion);
             this.ProjectMgr.SetProjectProperty(Conatants.PuppetForgeModuleDependency, this.ForgeModuleDependency);

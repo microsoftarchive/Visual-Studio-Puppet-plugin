@@ -19,11 +19,12 @@
   <ItemGroup>
     <Folder Include="manifests" />
     <Folder Include="tests" />
+    <Folder Include="spec" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifests\manifest.pp" />
     <None Include="tests\manifest_test.pp"/>
-    <None Include="Modulefile" />
+    <None Include="spec\spec_helper.rb"/>
     <None Include="README" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

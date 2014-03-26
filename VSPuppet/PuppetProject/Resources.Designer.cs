@@ -70,20 +70,38 @@ namespace MicrosoftOpenTech.PuppetProject {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}&gt; Deleting existing archive file &apos;{1}&apos; to create a new one.
+        ///   Looks up a localized string similar to Active module is empty.
         /// </summary>
-        internal static string DeletingExistingArchiveFile {
+        internal static string EmptyModule {
             get {
-                return ResourceManager.GetString("DeletingExistingArchiveFile", resourceCulture);
+                return ResourceManager.GetString("EmptyModule", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}&gt; File &apos;{1}&apos; added to archive &apos;{2}&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; is mandatory..
         /// </summary>
-        internal static string FileAddedToArchve {
+        internal static string IsMandatoryTempl {
             get {
-                return ResourceManager.GetString("FileAddedToArchve", resourceCulture);
+                return ResourceManager.GetString("IsMandatoryTempl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forge Module Name.
+        /// </summary>
+        internal static string ModuleName {
+            get {
+                return ResourceManager.GetString("ModuleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forge Module Version.
+        /// </summary>
+        internal static string ModuleVersion {
+            get {
+                return ResourceManager.GetString("ModuleVersion", resourceCulture);
             }
         }
         
@@ -97,6 +115,33 @@ namespace MicrosoftOpenTech.PuppetProject {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Puppet Module Uploaded Successfully.
+        /// </summary>
+        internal static string PuppetModuleUploadedSuccessfully {
+            get {
+                return ResourceManager.GetString("PuppetModuleUploadedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Puppet Module Uploading Failed.
+        /// </summary>
+        internal static string PuppetModuleUploadingFailed {
+            get {
+                return ResourceManager.GetString("PuppetModuleUploadingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Puppet Module Upload Staus.
+        /// </summary>
+        internal static string PuppetModuleUploadStatus {
+            get {
+                return ResourceManager.GetString("PuppetModuleUploadStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected project is not a Puppet Module.
         /// </summary>
         internal static string SelectedProjectIsNotAPuppetModule {
@@ -106,11 +151,20 @@ namespace MicrosoftOpenTech.PuppetProject {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tarball Creation Failed.
+        ///   Looks up a localized string similar to The server returned &apos;{0}&apos; with the status code &apos;{1} ({2:d})&apos;..
         /// </summary>
-        internal static string TarballCreationFailed {
+        internal static string ServerReturnedTemplate {
             get {
-                return ResourceManager.GetString("TarballCreationFailed", resourceCulture);
+                return ResourceManager.GetString("ServerReturnedTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A tarball was created and saved successfully.
+        /// </summary>
+        internal static string TarballSavedSuccessfully {
+            get {
+                return ResourceManager.GetString("TarballSavedSuccessfully", resourceCulture);
             }
         }
         
@@ -120,6 +174,24 @@ namespace MicrosoftOpenTech.PuppetProject {
         internal static string ToolWindowTitle {
             get {
                 return ResourceManager.GetString("ToolWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forge User Name.
+        /// </summary>
+        internal static string UserName {
+            get {
+                return ResourceManager.GetString("UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forge User Password.
+        /// </summary>
+        internal static string UserPassword {
+            get {
+                return ResourceManager.GetString("UserPassword", resourceCulture);
             }
         }
     }

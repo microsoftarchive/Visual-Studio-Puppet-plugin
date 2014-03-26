@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="430F36D0-C633-434E-A8CC-31EFC4EA0EBB" Version="1.5" Language="en-US" Publisher="Microsoft.OpenTech" />
-    <DisplayName>Puppet Language Support</DisplayName>
-    <Description xml:space="preserve">Puppet Language Support in VS2013</Description>
+    <Identity Id="366FF5F1-9521-4B84-9E56-1A6E154CBF96" Version="1.5" Language="en-US" Publisher="Microsoft.OpenTech" />
+    <DisplayName>Puppet Project Support</DisplayName>
+    <Description xml:space="preserve">Puppet Project Support in VS2013</Description>
   </Metadata>
   <Installation InstalledByMsi="false">
     <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[12.0]" />
