@@ -17,7 +17,7 @@
     <RootNamespace>MicrosoftOpenTech.PuppetProject</RootNamespace>
     <AssemblyName>PuppetProject</AssemblyName>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Key.snk.pfx</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -39,8 +39,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <DeployExtension>False</DeployExtension>
+    <CreateVsixContainer>False</CreateVsixContainer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="Microsoft.VisualStudio.Designer.Interfaces, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -60,15 +65,13 @@
     <Reference Include="Microsoft.VisualStudio.Shell.12.0" />
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" />
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="PresentationCore" />
@@ -119,6 +122,10 @@
     <Compile Include="ForgeControl.xaml.cs">
       <DependentUpon>ForgeControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ForgeJsonMetadata.cs" />
+    <Compile Include="ForgePublishWindow.xaml.cs">
+      <DependentUpon>ForgePublishWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GeneralPropertyPage.cs" />
     <Compile Include="PuppetForgeToolWindow.cs" />
     <Compile Include="Guids.cs" />
@@ -146,27 +153,20 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ZipProject Include="Templates\PuppetModule\manifest.pp" />
-    <ZipProject Include="Templates\PuppetModule\PuppetModule.ppm" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Key.snk" />
-    <ZipProject Include="Templates\PuppetModule\manifest_test.pp" />
-  </ItemGroup>
-  <ItemGroup>
     <VSCTCompile Include="PuppetProject.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Key.snk.pfx" />
+    <None Include="packages.config" />
     <None Include="Resources\Images.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Package.ico" />
-    <ZipProject Include="Templates\PuppetModule\README" />
-    <ZipProject Include="Templates\PuppetModule\Modulefile" />
-    <ZipProject Include="Templates\PuppetModule\PuppetModule.ico" />
-    <ZipProject Include="Templates\PuppetModule\PuppetModule.vstemplate" />
+    <None Include="source.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </None>
     <EmbeddedResource Include="Resources\PuppetProjectNode.bmp" />
   </ItemGroup>
   <ItemGroup>
@@ -174,8 +174,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ForgePublishWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>

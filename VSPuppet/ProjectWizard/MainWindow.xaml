@@ -1,23 +1,104 @@
 ﻿<Window x:Class="ProjectWizard.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="New Puppet Module Wizard" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Height="390" Width="548" HorizontalAlignment="Left" VerticalAlignment="Top" Topmost="True">
-    <Grid x:Name="gridModuleProperties" HorizontalAlignment="Stretch" Height="351" Margin="10,10,0,0" VerticalAlignment="Stretch">
-        <Label Content="User name" HorizontalAlignment="Left" Margin="37,26,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbUserName" HorizontalAlignment="Left" Height="23" Margin="125,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372" />
-        <Label Content="Password" HorizontalAlignment="Left" Margin="44,58,0,0" VerticalAlignment="Top"/>
-        <PasswordBox x:Name="pwdUserPassword" HorizontalAlignment="Left" Margin="125,66,0,0" VerticalAlignment="Top" Width="372" PasswordChanged="PasswordChangedHandler"/>
-        <Label Content="Module name" HorizontalAlignment="Left" Margin="21,89,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbModuleName" HorizontalAlignment="Left" Height="23" Margin="125,93,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372" />
-        <Label Content="Version" HorizontalAlignment="Left" Margin="54,121,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbVersion" HorizontalAlignment="Left" Height="23" Margin="125,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"/>
-        <Label Content="Dependency" HorizontalAlignment="Left" Margin="28,151,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbDependency" HorizontalAlignment="Left" Height="22" Margin="125,155,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372" />
-        <Label Content="Summary" HorizontalAlignment="Left" Margin="45,182,0,0" VerticalAlignment="Top" RenderTransformOrigin="4.962,0.077"/>
-        <TextBox x:Name="tbSummary" HorizontalAlignment="Left" Height="23" Margin="125,185,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"/>
-        <Label Content="Description" HorizontalAlignment="Left" Margin="32,216,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbDescriprtion" HorizontalAlignment="Left" Height="75" Margin="125,216,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"/>
-        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="422,300,0,0" VerticalAlignment="Top" Width="75" IsCancel="True" Click="btnCancel_Click"/>
-        <Button x:Name="btnOk" Content="Ok" HorizontalAlignment="Left" Margin="332,300,0,0" VerticalAlignment="Top" Width="75"  IsDefault="True" Click="btnOk_Click"/>
+        xmlns:projectWizard="clr-namespace:ProjectWizard"
+        Title="New Puppet Forge Module Wizard" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Height="390" Width="609" HorizontalAlignment="Left" VerticalAlignment="Top" Topmost="True">
+    <Grid x:Name="GridModuleProperties" HorizontalAlignment="Stretch" Height="351" Margin="10,10,10,10" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition  />
+            <RowDefinition  />
+            <RowDefinition  />
+            <RowDefinition  />
+            <RowDefinition  />
+            <RowDefinition  />
+            <RowDefinition  />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="{projectWizard:ResourceMapper ForgeUserName}"/>
+        <TextBox Grid.Row="0" Grid.Column="1"  Text="{Binding Path=UserName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" x:Name="tbUserName" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="400" >
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel>
+                        <!-- Placeholder for the TextBox itself -->
+                        <AdornedElementPlaceholder x:Name="textBox"/>
+                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+        </TextBox>
+
+        <Label Grid.Row="1" Grid.Column="0" Content="{projectWizard:ResourceMapper ForgeModuleName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=ModuleName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" x:Name="tbModuleName" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="400" >
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel>
+                        <!-- Placeholder for the TextBox itself -->
+                        <AdornedElementPlaceholder x:Name="textBox"/>
+                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+        </TextBox>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="{projectWizard:ResourceMapper ForgeModuleVersion}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=Version, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" x:Name="tbVersion" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="400">
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel>
+                        <!-- Placeholder for the TextBox itself -->
+                        <AdornedElementPlaceholder x:Name="textBox"/>
+                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+        </TextBox>
+
+        <Label Grid.Row="3" Grid.Column="0" Content="{projectWizard:ResourceMapper Dependency}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=Dependency, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" x:Name="tbDependency" HorizontalAlignment="Left" Height="22" TextWrapping="Wrap" VerticalAlignment="Top" Width="400" >
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel>
+                        <!-- Placeholder for the TextBox itself -->
+                        <AdornedElementPlaceholder x:Name="textBox"/>
+                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+        </TextBox>
+
+        <Label Grid.Row="4" Grid.Column="0" Content="{projectWizard:ResourceMapper Summary}" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="4.962,0.077"/>
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=Summary, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" x:Name="tbSummary" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="400">
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel>
+                        <!-- Placeholder for the TextBox itself -->
+                        <AdornedElementPlaceholder x:Name="textBox"/>
+                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+        </TextBox>
+
+        <Label Grid.Row="5" Grid.Column="0" Content="{projectWizard:ResourceMapper Description}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" x:Name="tbDescriprtion" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="400">
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel>
+                        <!-- Placeholder for the TextBox itself -->
+                        <AdornedElementPlaceholder x:Name="textBox"/>
+                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+        </TextBox>
+
+        <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" >
+            <Button x:Name="btnOk" Content="Ok"  Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75"  IsDefault="True" Click="btnOk_Click"/>
+            <Button x:Name="btnCancel" Content="Cancel"  Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsCancel="True" Click="btnCancel_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

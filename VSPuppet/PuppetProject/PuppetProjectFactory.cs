@@ -1,4 +1,11 @@
-﻿
+﻿// *********************************************************************************
+// 
+//     Microsoft Open Tech 
+//     VSPuppet
+//     Created by Vlad Shcherbakov (Akvelon)  03 2014
+// 
+// *********************************************************************************
+
 namespace MicrosoftOpenTech.PuppetProject
 {
     using System.Runtime.InteropServices;

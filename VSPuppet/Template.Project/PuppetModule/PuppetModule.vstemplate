@@ -5,13 +5,12 @@
     <Description>Creates a Puppet Module For Puppet Forge</Description>
     <Icon>PuppetModule.ico</Icon>
     <ProjectType>PuppetLab</ProjectType>
-    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
   </TemplateData>
   <TemplateContent>
     <Project File="PuppetModule.ppm" ReplaceParameters="true">
       <ProjectItem TargetFileName="manifests\manifest.pp" OpenInEditor="true" OpenOrder ="1" >manifest.pp</ProjectItem>
       <ProjectItem TargetFileName="tests\manifest_test.pp" OpenInEditor="true" OpenOrder ="2" >manifest_test.pp</ProjectItem>
-      <ProjectItem ReplaceParameters="true" OpenInEditor="false">Modulefile</ProjectItem>
+      <ProjectItem TargetFileName="spec\spec_helper.rb" OpenInEditor="false" >spec_helper.rb</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="true" OpenOrder ="3" >README</ProjectItem>
     </Project>
   </TemplateContent>

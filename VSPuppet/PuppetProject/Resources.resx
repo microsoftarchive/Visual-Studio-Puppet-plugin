@@ -120,22 +120,46 @@
   <data name="CanNotCreateWindow" xml:space="preserve">
     <value>Can not create tool window.</value>
   </data>
-  <data name="DeletingExistingArchiveFile" xml:space="preserve">
-    <value>{0}&gt; Deleting existing archive file '{1}' to create a new one</value>
+  <data name="EmptyModule" xml:space="preserve">
+    <value>Active module is empty</value>
   </data>
-  <data name="FileAddedToArchve" xml:space="preserve">
-    <value>{0}&gt; File '{1}' added to archive '{2}'</value>
+  <data name="IsMandatoryTempl" xml:space="preserve">
+    <value>'{0}' is mandatory.</value>
+  </data>
+  <data name="ModuleName" xml:space="preserve">
+    <value>Forge Module Name</value>
+  </data>
+  <data name="ModuleVersion" xml:space="preserve">
+    <value>Forge Module Version</value>
   </data>
   <data name="NoActivePuppetModule" xml:space="preserve">
     <value>No Active Puppet Module</value>
   </data>
+  <data name="PuppetModuleUploadedSuccessfully" xml:space="preserve">
+    <value>Puppet Module Uploaded Successfully</value>
+  </data>
+  <data name="PuppetModuleUploadingFailed" xml:space="preserve">
+    <value>Puppet Module Uploading Failed</value>
+  </data>
+  <data name="PuppetModuleUploadStatus" xml:space="preserve">
+    <value>Puppet Module Upload Staus</value>
+  </data>
   <data name="SelectedProjectIsNotAPuppetModule" xml:space="preserve">
     <value>Selected project is not a Puppet Module</value>
   </data>
-  <data name="TarballCreationFailed" xml:space="preserve">
-    <value>Tarball Creation Failed</value>
+  <data name="ServerReturnedTemplate" xml:space="preserve">
+    <value>The server returned '{0}' with the status code '{1} ({2:d})'.</value>
   </data>
   <data name="ToolWindowTitle" xml:space="preserve">
     <value>Puppet Forge Window</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Forge User Name</value>
+  </data>
+  <data name="UserPassword" xml:space="preserve">
+    <value>Forge User Password</value>
+  </data>
+  <data name="TarballSavedSuccessfully" xml:space="preserve">
+    <value>A tarball was created and saved successfully</value>
   </data>
 </root>

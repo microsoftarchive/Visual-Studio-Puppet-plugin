@@ -1,104 +1,149 @@
-﻿
+﻿// *********************************************************************************
+// 
+//     Microsoft Open Tech 
+//     VSPuppet
+//     Created by Vlad Shcherbakov (Akvelon)  03 2014
+// 
+// *********************************************************************************
+
 namespace ProjectWizard
 {
     using System;
-    using System.Security;
+    using System.Linq;
+    using System.Text.RegularExpressions;
     using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Data;
+    using System.Windows.Markup;
+    using Res = Properties.Resources;
+
+    public class ResourceMapper : MarkupExtension
+    {
+        private string ResKey { get; set; }
+
+        public ResourceMapper(string resKey)
+        {
+            this.ResKey = resKey;
+        }
+
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return Properties.Resources.ResourceManager.GetString(this.ResKey);
+        }
+    }
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        private string userName;
-
-        public string UserName
+        
+        public class ViewModel : System.ComponentModel.IDataErrorInfo
         {
-            get
+            public string UserName { get; set; }
+
+            public string ModuleName { get; set; }
+
+            public string Version { get; set; }
+
+            public string Dependency { get; set; }
+
+            public string Summary { get; set; }
+
+            public string Description { get; set; }
+
+            public ViewModel()
             {
-                return userName;
+                Version = "0.0.1";
+                Dependency = "'puppetlabs/stdlib', '>=2.2.1'";
             }
 
-            set
+            public string this[string columnName]
             {
-                this.userName = value;
-                tbUserName.Text = this.userName;
+                get
+                {
+                    var error = string.Empty;
+
+                    switch (columnName)
+                    {
+                        case "UserName":
+                            if (String.IsNullOrEmpty(UserName))
+                                error = string.Format(Res.IsMandatoryTempl, Res.ForgeUserName);
+                            break;
+                        case "ModuleName":
+                            if (String.IsNullOrEmpty(ModuleName))
+                                error = string.Format(Res.IsMandatoryTempl, Res.ForgeModuleName);
+                            break;
+                        case "Summary":
+                            if (String.IsNullOrEmpty(Summary))
+                                error = string.Format(Res.IsMandatoryTempl, Res.Summary);
+                            break;
+                        case "Version":
+                        {
+                            if (String.IsNullOrEmpty(Version))
+                            {
+                                error = string.Format(Res.IsMandatoryTempl, Res.ForgeModuleVersion);
+                                break;
+                            }
+
+                            const string pattern = @"^\d+\.\d+\.\d+$";
+                            var rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+
+                            if (!rgx.IsMatch(Version))
+                            {
+                                error = string.Format(Res.DoNotMatchPatternTempl, Res.ForgeModuleVersion);
+                            }
+                            
+                            break;
+                        }
+                        case "Dependency":
+                        {
+                            const string patternCom = @"^'\w+/\w+',\s*'(ge|le|g|l)?(\d+\.\d+\.(\d+|x))'$";
+                            const string patternVer = @"\b((ge|le|g|l))?(?(1)\s*\d+\.\d+\.\d+|\s*\d+\.\d+\.(\d+|x))\b";
+                            var dep = Dependency.Replace('<', 'l').Replace('>', 'g').Replace('=', 'e');
+                            const RegexOptions opt = RegexOptions.IgnoreCase;
+
+                            if (!new Regex(patternCom, opt).IsMatch(dep) || Regex.Matches(dep, patternVer, opt).Count == 0)
+                            {
+                                error = string.Format(Res.DoNotMatchPatternTempl, Res.Dependency);
+                            }
+
+                            break;
+                        }
+                    }
+
+                    return error;
+                }
+            }
+
+            public string Error
+            {
+                get { return "Please verify the form is filled in correctly"; }
             }
         }
 
-        private string moduleName;
-
-        public string ModuleName 
-        {
-            get
-            {
-                return moduleName;
-            } 
-
-            set
-            {
-                this.moduleName = value;
-                tbModuleName.Text = this.moduleName;
-            }
-        }
-
-        public SecureString Password { get; set; }
-
-        public string Version { get; set; }
-
-        public string Dependency { get; set; }
-
-        public string Summary { get; set; }
-
-        public string Description { get; set; }
+        public readonly ViewModel viewModel = new ViewModel();
 
         public MainWindow()
         {
             InitializeComponent();
-
-            this.Version = "0.0.1";
-            this.Dependency = "'puppetlabs/mysql', '1.2.3'";
-
-            gridModuleProperties.DataContext = this;
-
-            var userNameBinding = new Binding("UserName");
-            tbUserName.SetBinding(TextBox.TextProperty, userNameBinding);
-
-            var moduleNameBinding = new Binding("ModuleName");
-            tbModuleName.SetBinding(TextBox.TextProperty, moduleNameBinding);
-            
-            var versionBinding = new Binding("Version");
-            tbVersion.SetBinding(TextBox.TextProperty, versionBinding);
-
-            var dependencyBinding = new Binding("Dependency");
-            tbDependency.SetBinding(TextBox.TextProperty, dependencyBinding);
-
-            var symmaryBinding = new Binding("Summary");
-            tbSummary.SetBinding(TextBox.TextProperty, symmaryBinding);
-
-            var descriptionBinding = new Binding("Description");
-            tbDescriprtion.SetBinding(TextBox.TextProperty, descriptionBinding);
-
+            DataContext = viewModel;
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+            if (viewModel != null)
+            {
+                if (viewModel.GetType().GetProperties().Any(prop => !string.IsNullOrEmpty(viewModel[prop.Name])))
+                {
+                    return;
+                }
+
+                DialogResult = true;
+            }
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
         }
-
-        private void PasswordChangedHandler(Object sender, RoutedEventArgs args)
-        {
-            var pwdBox = sender as PasswordBox;
-            if (pwdBox != null) this.Password = pwdBox.SecurePassword;
-        }
-
     }
 }
