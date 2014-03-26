@@ -1,11 +1,7 @@
-﻿// *********************************************************************************
-// 
-//     Microsoft Open Tech 
-//     VSPuppet
-//     Created by Vlad Shcherbakov (Akvelon)  03 2014
-// 
-// *********************************************************************************
-
+﻿// --------------------------------------------------------------------------
+//     Copyright (c) Microsoft Open Technologies, Inc.
+//     All Rights Reserved. Licensed under the Apache 2.0 License.
+// --------------------------------------------------------------------------
 namespace EditorClassifier
 {
     public static class Constants

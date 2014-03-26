@@ -65,7 +65,7 @@
         <Parent guid="guidPuppetProjectCmdSet" id="PuppetModuleMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>Create A Tarball And Save Locally</ButtonText>
+          <ButtonText>Create a Tarball and Save Locally</ButtonText>
         </Strings>
       </Button>
 
@@ -73,7 +73,7 @@
         <Parent guid="guidPuppetProjectCmdSet" id="PuppetModuleMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>Create A Tarball And Upload To The Puppet Forge</ButtonText>
+          <ButtonText>Create a Tarball and Upload to the Puppet Forge</ButtonText>
         </Strings>
       </Button>
 

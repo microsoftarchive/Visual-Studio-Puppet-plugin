@@ -1,4 +1,8 @@
-﻿
+﻿// --------------------------------------------------------------------------
+//     Copyright (c) Microsoft Open Technologies, Inc.
+//     All Rights Reserved. Licensed under the Apache 2.0 License.
+// --------------------------------------------------------------------------
+
 namespace MicrosoftOpenTech.PuppetProject
 {
     public static class Conatants

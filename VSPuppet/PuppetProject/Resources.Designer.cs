@@ -70,7 +70,7 @@ namespace MicrosoftOpenTech.PuppetProject {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active module is empty.
+        ///   Looks up a localized string similar to Active Puppet Module is Empty.
         /// </summary>
         internal static string EmptyModule {
             get {
@@ -106,7 +106,7 @@ namespace MicrosoftOpenTech.PuppetProject {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Active Puppet Module.
+        ///   Looks up a localized string similar to No Active Puppet Module Found.
         /// </summary>
         internal static string NoActivePuppetModule {
             get {
@@ -120,15 +120,6 @@ namespace MicrosoftOpenTech.PuppetProject {
         internal static string PuppetModuleUploadedSuccessfully {
             get {
                 return ResourceManager.GetString("PuppetModuleUploadedSuccessfully", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Puppet Module Uploading Failed.
-        /// </summary>
-        internal static string PuppetModuleUploadingFailed {
-            get {
-                return ResourceManager.GetString("PuppetModuleUploadingFailed", resourceCulture);
             }
         }
         
@@ -156,6 +147,15 @@ namespace MicrosoftOpenTech.PuppetProject {
         internal static string ServerReturnedTemplate {
             get {
                 return ResourceManager.GetString("ServerReturnedTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tarball Creation Status.
+        /// </summary>
+        internal static string TarballCreationStatus {
+            get {
+                return ResourceManager.GetString("TarballCreationStatus", resourceCulture);
             }
         }
         

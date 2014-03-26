@@ -121,7 +121,7 @@
     <value>Can not create tool window.</value>
   </data>
   <data name="EmptyModule" xml:space="preserve">
-    <value>Active module is empty</value>
+    <value>Active Puppet Module is Empty</value>
   </data>
   <data name="IsMandatoryTempl" xml:space="preserve">
     <value>'{0}' is mandatory.</value>
@@ -133,13 +133,10 @@
     <value>Forge Module Version</value>
   </data>
   <data name="NoActivePuppetModule" xml:space="preserve">
-    <value>No Active Puppet Module</value>
+    <value>No Active Puppet Module Found</value>
   </data>
   <data name="PuppetModuleUploadedSuccessfully" xml:space="preserve">
     <value>Puppet Module Uploaded Successfully</value>
-  </data>
-  <data name="PuppetModuleUploadingFailed" xml:space="preserve">
-    <value>Puppet Module Uploading Failed</value>
   </data>
   <data name="PuppetModuleUploadStatus" xml:space="preserve">
     <value>Puppet Module Upload Staus</value>
@@ -161,5 +158,8 @@
   </data>
   <data name="TarballSavedSuccessfully" xml:space="preserve">
     <value>A tarball was created and saved successfully</value>
+  </data>
+  <data name="TarballCreationStatus" xml:space="preserve">
+    <value>Tarball Creation Status</value>
   </data>
 </root>

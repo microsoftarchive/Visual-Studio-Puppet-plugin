@@ -1,9 +1,7 @@
-/***************************************************************************
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-***************************************************************************/
-
+// --------------------------------------------------------------------------
+//     Copyright (c) Microsoft Open Technologies, Inc.
+//     All Rights Reserved. Licensed under the Apache 2.0 License.
+// --------------------------------------------------------------------------
 namespace Puppet
 {
     using Microsoft.VisualStudio.Package;

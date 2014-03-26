@@ -1,10 +1,11 @@
 ﻿<VSTemplate Version="3.0.0" Type="Project"
     xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name>PuppetModule</Name>
+    <Name>Puppet Module</Name>
+    <DefaultName>PuppetModule</DefaultName>
     <Description>Creates a Puppet Module For Puppet Forge</Description>
     <Icon>PuppetModule.ico</Icon>
-    <ProjectType>PuppetLab</ProjectType>
+    <ProjectType>Puppet Labs</ProjectType>
   </TemplateData>
   <TemplateContent>
     <Project File="PuppetModule.ppm" ReplaceParameters="true">

@@ -1,11 +1,7 @@
-﻿// *********************************************************************************
-// 
-//     Microsoft Open Tech 
-//     VSPuppet
-//     Created by Vlad Shcherbakov (Akvelon)  03 2014
-// 
-// *********************************************************************************
-
+﻿// --------------------------------------------------------------------------
+//     Copyright (c) Microsoft Open Technologies, Inc.
+//     All Rights Reserved. Licensed under the Apache 2.0 License.
+// --------------------------------------------------------------------------
 namespace MicrosoftOpenTech.PuppetProject
 {
     using ICSharpCode.SharpZipLib.GZip;
@@ -59,7 +55,7 @@ namespace MicrosoftOpenTech.PuppetProject
         "ppm",
         "ppm",
         @".\\NullPath",
-        LanguageVsTemplate = "PuppetLab")]
+        LanguageVsTemplate = "Puppet Labs")]
     [ProvideObject(typeof(GeneralPropertyPage))]
 
     [Guid(GuidList.guidPuppetProjectPkgString)]
@@ -697,7 +693,7 @@ namespace MicrosoftOpenTech.PuppetProject
             }
             catch (Exception ex)
             {
-                this.MessageBox(ex.Message, Resources.PuppetModuleUploadStatus);
+                this.MessageBox(ex.Message, Resources.TarballCreationStatus);
             }
         }
 
@@ -719,7 +715,7 @@ namespace MicrosoftOpenTech.PuppetProject
             }
             catch (Exception ex)
             {
-                this.MessageBox(ex.Message, Resources.PuppetModuleUploadStatus);
+                this.MessageBox(ex.Message, Resources.TarballCreationStatus);
             }
         }
 
