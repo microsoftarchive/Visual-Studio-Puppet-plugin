@@ -1,19 +1,14 @@
-﻿// *********************************************************************************
-// 
-//     Microsoft Open Tech 
-//     VSPuppet
-//     Created by Vlad Shcherbakov (Akvelon)  03 2014
-// 
-// *********************************************************************************
-
-using System.Security;
-using System.Windows.Controls;
-
+﻿// --------------------------------------------------------------------------
+//     Copyright (c) Microsoft Open Technologies, Inc.
+//     All Rights Reserved.
+//     Licensed under the Apache License, Version 2.0.
+//     See License.txt in the project root for license information
+// --------------------------------------------------------------------------
 namespace MicrosoftOpenTech.PuppetProject
 {
     using System;
-    using System.Linq;
     using System.Windows;
+    using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Markup;
 

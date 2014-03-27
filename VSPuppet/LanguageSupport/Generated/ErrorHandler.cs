@@ -1,14 +1,14 @@
 // --------------------------------------------------------------------------
 //     Copyright (c) Microsoft Open Technologies, Inc.
-//     All Rights Reserved. Licensed under the Apache 2.0 License.
+//     All Rights Reserved.
+//     Licensed under the Apache License, Version 2.0.
+//     See License.txt in the project root for license information
 // --------------------------------------------------------------------------
 namespace Puppet.Parser
 {
-    using System;
-    using System.IO;
-    using System.Collections.Generic;
-    using System.Text;
     using Puppet.ParserGenerator;
+    using System;
+    using System.Collections.Generic;
 
     public class Error : IComparable<Error>
     {
