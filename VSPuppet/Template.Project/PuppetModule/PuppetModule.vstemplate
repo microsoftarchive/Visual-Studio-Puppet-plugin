@@ -9,14 +9,14 @@
   </TemplateData>
   <TemplateContent>
     <Project File="PuppetModule.ppm" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" OpenInEditor="true" OpenOrder ="1" >README</ProjectItem>
-      <ProjectItem TargetFileName="manifests\compliance_example.pp" OpenInEditor="true" OpenOrder ="2" >compliance_example.pp</ProjectItem>
-      <ProjectItem TargetFileName="manifests\init.pp" OpenInEditor="true" OpenOrder ="3" >init.pp</ProjectItem>
-      <ProjectItem TargetFileName="manifests\purge_example.pp" OpenInEditor="true" OpenOrder ="4" >purge_example.pp</ProjectItem>
-      <ProjectItem TargetFileName="manifests\service.pp" OpenInEditor="true" OpenOrder ="5" >service.pp</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="false" OpenOrder ="1" >README</ProjectItem>
+      <ProjectItem TargetFileName="manifests\compliance_example.pp" OpenInEditor="false" OpenOrder ="2" >compliance_example.pp</ProjectItem>
+      <ProjectItem TargetFileName="manifests\init.pp" OpenInEditor="false" OpenOrder ="3" >init.pp</ProjectItem>
+      <ProjectItem TargetFileName="manifests\purge_example.pp" OpenInEditor="false" OpenOrder ="4" >purge_example.pp</ProjectItem>
+      <ProjectItem TargetFileName="manifests\service.pp" OpenInEditor="false" OpenOrder ="5" >service.pp</ProjectItem>
       <ProjectItem TargetFileName="manifests\service_example.pp" OpenInEditor="true" OpenOrder ="6" >service_example.pp</ProjectItem>
-      <ProjectItem TargetFileName="manifests\value.pp" OpenInEditor="true" OpenOrder ="7" >value.pp</ProjectItem>
-      <ProjectItem TargetFileName="tests\registry_examples.pp" OpenInEditor="true" OpenOrder ="8" >registry_examples.pp</ProjectItem>
+      <ProjectItem TargetFileName="manifests\value.pp" OpenInEditor="false" OpenOrder ="7" >value.pp</ProjectItem>
+      <ProjectItem TargetFileName="tests\registry_examples.pp" OpenInEditor="false" OpenOrder ="8" >registry_examples.pp</ProjectItem>
       <ProjectItem TargetFileName="spec\spec_helper.rb" OpenInEditor="false" >spec_helper.rb</ProjectItem>
       <ProjectItem TargetFileName="spec\watchr.rb" OpenInEditor="false" >watchr.rb</ProjectItem>
     </Project>
