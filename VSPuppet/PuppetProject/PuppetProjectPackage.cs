@@ -4,6 +4,7 @@
 //     Licensed under the Apache License, Version 2.0.
 //     See License.txt in the project root for license information
 // --------------------------------------------------------------------------
+
 namespace MicrosoftOpenTech.PuppetProject
 {
     using ICSharpCode.SharpZipLib.GZip;
@@ -27,6 +28,7 @@ namespace MicrosoftOpenTech.PuppetProject
     using System.Security;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Threading;
     using System.Web.Script.Serialization;
     using FilesToPack = System.Collections.Generic.List<System.Tuple<System.IO.FileInfo, string>>;
     using SELF = PuppetProjectPackage;
@@ -232,7 +234,7 @@ namespace MicrosoftOpenTech.PuppetProject
             return filesToPack;
         }
 
-        private ForgeJsonMetadata CreateJsonMetadata(PuppetProjectNode puppetProjectNode, FilesToPack filesToPack)
+        private static ForgeJsonMetadata CreateJsonMetadata(PuppetProjectNode puppetProjectNode, FilesToPack filesToPack)
         {
             if(null == puppetProjectNode)
                 throw new ArgumentNullException("puppetProjectNode");
@@ -464,15 +466,12 @@ namespace MicrosoftOpenTech.PuppetProject
             }
         }
 
-        string GetAccessToken(string username)
+        private static string GetAccessToken(string username, SecureString password)
         {
             string result = null;
 
             // Setup the variables necessary to make the Request 
-            const string grantType = "password";
-            const string applicationId = "a6417131cac7b42b5e9d69daeccb06e5dbf2ea71b767d00ecb12439634233632";
-            const string clientSecret = "d5a0b991b8361fe86b7e96336862d813aec811a35278361bd7ad2b08a14a9d7b";
-            const string url = "https://forgeapi.puppetlabs.com/oauth/token";
+            const string url = "http://puppetforgegate.cloudapp.net:8080/api/Token";
 
             HttpWebResponse response = null;
 
@@ -480,11 +479,8 @@ namespace MicrosoftOpenTech.PuppetProject
             {
                 // Create the data to send
                 var data = new StringBuilder();
-                data.Append("grant_type=" + Uri.EscapeDataString(grantType));
-                data.Append("&client_id=" + Uri.EscapeDataString(applicationId));
-                data.Append("&client_secret=" + Uri.EscapeDataString(clientSecret));
                 data.Append("&username=" + Uri.EscapeDataString(username));
-                data.Append("&password=" + Uri.EscapeDataString(SELF.ConvertToUnsecureString(this.password)));
+                data.Append("&password=" + Uri.EscapeDataString(SELF.ConvertToUnsecureString(password)));
 
                 // Create a byte array of the data to be sent
                 byte[] byteArray = Encoding.UTF8.GetBytes(data.ToString());
@@ -516,7 +512,7 @@ namespace MicrosoftOpenTech.PuppetProject
                     // Retrieve and Return the Access Token
                     var ser = new JavaScriptSerializer();
                     var x = (Dictionary<string, object>)ser.DeserializeObject(json);
-                    var accessToken = x["access_token"].ToString();
+                    var accessToken = x["AccessToken"].ToString();
                     result = accessToken;
                 }
             }
@@ -528,21 +524,22 @@ namespace MicrosoftOpenTech.PuppetProject
             return result;
         }
 
-        void PublishModule(string accessToken, string owner, string moduleName, string moduleModuleTarballPath)
+        private static void UploadTarball(string accessToken, string owner, string moduleName, string moduleModuleTarballPath)
         {
             // Setup the variables necessary to make the Request 
             const string url = "https://forgeapi.puppetlabs.com/v2/releases";
 
             var nvc = new NameValueCollection
             {
-                {"owner", owner}, 
+                {"owner", owner},
                 {"module", moduleName}
             };
 
-            this.HttpUploadFile(accessToken, url, moduleModuleTarballPath, "file", "application/gzip", nvc);
+            SELF.HttpUploadFile(accessToken, url, moduleModuleTarballPath,
+                "file", "application/gzip", nvc);
         }
 
-        private void HttpUploadFile(string accessToken, string url, string file, string paramName, string contentType, NameValueCollection nvc)
+        private static void HttpUploadFile(string accessToken, string url, string file, string paramName, string contentType, NameValueCollection nvc)
         {
             string boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x");
             byte[] boundarybytes = System.Text.Encoding.ASCII.GetBytes("\r\n--" + boundary + "\r\n");
@@ -596,7 +593,7 @@ namespace MicrosoftOpenTech.PuppetProject
                 {
                     var reader2 = new StreamReader(stream2);
                     var msg = reader2.ReadToEnd();
-                    this.MessageBox(Resources.PuppetModuleUploadedSuccessfully, Resources.PuppetModuleUploadStatus);
+//                    this.MessageBox(Resources.PuppetModuleUploadedSuccessfully, Resources.PuppetModuleUploadStatus);
                 }
             }
             finally
@@ -609,6 +606,96 @@ namespace MicrosoftOpenTech.PuppetProject
 
                 wr = null;
             }
+        }
+
+        private async void UploadToPuppetForgeAsync(PuppetProjectNode puppetProjectNode, string tarballName)
+        {
+            var cancelationSource = new CancellationTokenSource();
+            var cancelationToken = cancelationSource.Token;
+            var uploadProgressWindow = new UploadProgressWindow(cancelationSource);
+            try
+            {
+                var username = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeUserName, false);
+                var forgeModuleName = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleName, false);
+                var modulename = forgeModuleName.ToLower();
+                var moduleversion = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleVersion, false); ;
+
+                var forgePublishWindow = new ForgePublishWindow
+                {
+                    tbAccountName = { Text = username },
+                    tbModuleName = { Text = modulename },
+                    tbModuleVersion = { Text = moduleversion }
+                };
+
+                if (this.password != null && this.password.Length != 0)
+                {
+                    forgePublishWindow.pwdAcountPassword.Password = SELF.ConvertToUnsecureString(this.password);
+                    forgePublishWindow.btnPublish.IsEnabled = true;
+                }
+
+                var res = forgePublishWindow.ShowDialog();
+
+                if (!res.HasValue || res.Value == false)
+                {
+                    return;
+                }
+
+                this.password = forgePublishWindow.pwdAcountPassword.SecurePassword;
+
+                uploadProgressWindow.Show();
+
+                var accessToken = await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        cancelationToken.ThrowIfCancellationRequested();
+                        return SELF.GetAccessToken(username, this.password);
+                    }, cancelationToken);
+
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    cancelationToken.ThrowIfCancellationRequested();
+                    SELF.UploadTarball(accessToken, username, modulename, tarballName);
+                }, cancelationToken);
+
+                uploadProgressWindow.lblStatus.Content = Resources.PuppetModuleUploadedSuccessfully;
+                uploadProgressWindow.progressBar.Value = 100;
+            }
+            catch (OperationCanceledException ex)
+            {
+                Debug.WriteLine("Canceled");
+                uploadProgressWindow.lblStatus.Content = "Canceled by user.";
+                uploadProgressWindow.progressBar.Value = 0;
+            }
+            catch (WebException ex)
+            {
+                // This exception will be raised if the server didn't return 200 - OK
+                // Retrieve more information about the error
+
+                if (ex.Response != null)
+                {
+                    using (var err = (HttpWebResponse)ex.Response)
+                    {
+                        var info = string.Format(Resources.ServerReturnedTemplate,
+                            err.StatusDescription, err.StatusCode, err.StatusCode);
+
+                        uploadProgressWindow.lblStatus.Content = info;
+                    }
+                }
+                else
+                {
+                    uploadProgressWindow.lblStatus.Content = ex.Message;
+                }
+
+                uploadProgressWindow.progressBar.Value = 0;
+            }
+            catch (Exception ex)
+            {
+                uploadProgressWindow.lblStatus.Content = ex.Message;
+                uploadProgressWindow.progressBar.Value = 0;
+            }
+            
+            uploadProgressWindow.progressBar.IsIndeterminate = false;
+            uploadProgressWindow.btnCancel.Content = "Close";
+
         }
 
         public static string ConvertToUnsecureString(SecureString securePassword)
@@ -640,57 +727,10 @@ namespace MicrosoftOpenTech.PuppetProject
                 PuppetProjectNode puppetProjectNode;
                 var filesToPack = this.GetActiveProjectStruture(out puppetProjectNode);
 
-                var username = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeUserName, false);
-                var forgeModuleName = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleName, false);
-                var modulename = forgeModuleName.ToLower();
-                var moduleversion = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleVersion, false); ;
-
-                var forgePublishWindow = new ForgePublishWindow
-                {
-                    tbAccountName = {Text = username},
-                    tbModuleName = {Text = modulename},
-                    tbModuleVersion = {Text = moduleversion}
-                };
-
-                if (this.password != null && this.password.Length != 0)
-                {
-                    forgePublishWindow.pwdAcountPassword.Password = SELF.ConvertToUnsecureString(this.password);
-                    forgePublishWindow.btnPublish.IsEnabled = true;
-                }
-
-                var res = forgePublishWindow.ShowDialog();
-
-                if (!res.HasValue || res.Value == false)
-                {
-                    return;
-                }
-
-                this.password = forgePublishWindow.pwdAcountPassword.SecurePassword;
-
-                var jsonMetadata = this.CreateJsonMetadata(puppetProjectNode, filesToPack);
+                var jsonMetadata = SELF.CreateJsonMetadata(puppetProjectNode, filesToPack);
                 var gzFileName = SELF.TarGz(puppetProjectNode, filesToPack, jsonMetadata);
-                
-                var forgeAccessToken = this.GetAccessToken(username);
-                this.PublishModule(forgeAccessToken, username, modulename, gzFileName);
-            }
-            catch (WebException ex)
-            {
-                // This exception will be raised if the server didn't return 200 - OK
-                // Retrieve more information about the error
-                if (ex.Response != null)
-                {
-                    using (var err = (HttpWebResponse)ex.Response)
-                    {
-                        var info = string.Format(Resources.ServerReturnedTemplate,
-                            err.StatusDescription, err.StatusCode, err.StatusCode);
 
-                        this.MessageBox(info, Resources.PuppetModuleUploadStatus);
-                    }
-                }
-                else
-                {
-                    this.MessageBox(ex.Message, Resources.PuppetModuleUploadStatus);
-                }
+                this.UploadToPuppetForgeAsync(puppetProjectNode, gzFileName);
 
             }
             catch (Exception ex)
@@ -706,14 +746,13 @@ namespace MicrosoftOpenTech.PuppetProject
                 PuppetProjectNode puppetProjectNode;
                 var filesToPack = this.GetActiveProjectStruture(out puppetProjectNode);
 
-                var jsonMetadata = this.CreateJsonMetadata(puppetProjectNode, filesToPack);
+                var jsonMetadata =  SELF.CreateJsonMetadata(puppetProjectNode, filesToPack);
                 var gzFileName = SELF.TarGz(puppetProjectNode, filesToPack, jsonMetadata);
 
                 var packagesDir = new DirectoryInfo(puppetProjectNode.BaseURI.Directory).CreateSubdirectory("packages");
                 var destFile = System.IO.Path.Combine(packagesDir.ToString(), gzFileName);
                 File.Copy(gzFileName, destFile, true);
                 this.MessageBox(destFile, Resources.TarballSavedSuccessfully);
-
             }
             catch (Exception ex)
             {
@@ -723,7 +762,6 @@ namespace MicrosoftOpenTech.PuppetProject
 
         private void MessageBox(string message, string caption)
         {
-            // Show a Message Box to prove we were here
             var uiShell = (IVsUIShell)GetService(typeof(SVsUIShell));
             var clsid = Guid.Empty;
             int result;

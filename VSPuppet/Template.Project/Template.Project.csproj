@@ -94,11 +94,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="PuppetModule\manifest.pp" />
+    <None Include="PuppetModule\compliance_example.pp" />
+    <None Include="PuppetModule\init.pp" />
+    <None Include="PuppetModule\purge_example.pp" />
+    <None Include="PuppetModule\registry_examples.pp" />
+    <None Include="PuppetModule\service.pp" />
+    <None Include="PuppetModule\service_example.pp" />
     <None Include="PuppetModule\spec_helper.rb" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="PuppetModule\manifest_test.pp" />
+    <None Include="PuppetModule\value.pp" />
+    <None Include="PuppetModule\watchr.rb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PuppetModule\PuppetModule.ico" />

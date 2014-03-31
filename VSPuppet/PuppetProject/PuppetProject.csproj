@@ -140,6 +140,9 @@
     <Compile Include="PkgCmdID.cs" />
     <Compile Include="PuppetProjectFactory.cs" />
     <Compile Include="PuppetProjectNode.cs" />
+    <Compile Include="UploadProgressWindow.xaml.cs">
+      <DependentUpon>UploadProgressWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -175,6 +178,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ForgePublishWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UploadProgressWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

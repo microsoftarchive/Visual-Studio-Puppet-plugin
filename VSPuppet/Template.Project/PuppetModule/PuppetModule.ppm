@@ -22,9 +22,15 @@
     <Folder Include="spec" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="manifests\manifest.pp" />
-    <None Include="tests\manifest_test.pp"/>
+    <None Include="manifests\compliance_example.pp" />
+    <None Include="manifests\init.pp" />
+    <None Include="manifests\purge_example.pp" />
+    <None Include="manifests\service.pp" />
+    <None Include="manifests\service_example.pp" />
+    <None Include="manifests\value.pp" />
+    <None Include="tests\registry_examples.pp"/>
     <None Include="spec\spec_helper.rb"/>
+    <None Include="spec\watchr.rb"/>
     <None Include="README" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
