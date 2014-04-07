@@ -5,6 +5,8 @@
 //     See License.txt in the project root for license information
 // --------------------------------------------------------------------------
 
+using System.Text.RegularExpressions;
+
 namespace MicrosoftOpenTech.PuppetProject
 {
     using ICSharpCode.SharpZipLib.GZip;
@@ -31,6 +33,7 @@ namespace MicrosoftOpenTech.PuppetProject
     using System.Threading;
     using System.Web.Script.Serialization;
     using FilesToPack = System.Collections.Generic.List<System.Tuple<System.IO.FileInfo, string>>;
+    using ForgeData = System.Collections.Generic.Dictionary<string,string>;
     using SELF = PuppetProjectPackage;
 
     /// <summary>
@@ -121,7 +124,7 @@ namespace MicrosoftOpenTech.PuppetProject
             base.Initialize();
 
             this.RegisterProjectFactory(new PuppetProjectFactory(this));
-            this.DteService = (EnvDTE.DTE)GetService(typeof(EnvDTE.DTE)); 
+            this.DteService = (EnvDTE.DTE)this.GetService(typeof(EnvDTE.DTE)); 
 
             // Add our command handlers for menu (commands must exist in the .vsct file)
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
@@ -159,10 +162,10 @@ namespace MicrosoftOpenTech.PuppetProject
         }
         #endregion
 
-        private FilesToPack GetActiveProjectStruture(out PuppetProjectNode puppetProjectNode)
+        internal FilesToPack GetActiveProjectStruture(out PuppetProjectNode puppetProjectNode)
         {
             // Get selected project 
-            var projects = DteService.ActiveSolutionProjects as Array;
+            var projects = this.DteService.ActiveSolutionProjects as Array;
 
             if (null == projects || projects.Length <= 0)
             {
@@ -183,7 +186,12 @@ namespace MicrosoftOpenTech.PuppetProject
                 throw new NullReferenceException(Resources.SelectedProjectIsNotAPuppetModule);
             }
 
-            var filesToPack = new List<Tuple<FileInfo, string>>();
+            return this.GetFileStructure(project);
+        }
+
+        internal FilesToPack GetFileStructure(OAProject project)
+        {
+            var filesToPack = new FilesToPack();
 
             foreach (var projectItem in project.ProjectItems)
             {
@@ -234,10 +242,11 @@ namespace MicrosoftOpenTech.PuppetProject
             return filesToPack;
         }
 
-        private static ForgeJsonMetadata CreateJsonMetadata(PuppetProjectNode puppetProjectNode, FilesToPack filesToPack)
+
+        internal static ForgeJsonMetadata CreateJsonMetadata(ForgeData forgeData, FilesToPack filesToPack)
         {
-            if(null == puppetProjectNode)
-                throw new ArgumentNullException("puppetProjectNode");
+            if (null == forgeData)
+                throw new ArgumentNullException("forgeData");
 
             if (null == filesToPack)
                 throw new ArgumentNullException("filesToPack");
@@ -246,14 +255,12 @@ namespace MicrosoftOpenTech.PuppetProject
             
             if (filesToPack.Count > 0)
             {
-                // Create json metadata file from project options
-
-                var forgeUserName = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeUserName, false);
-                var forgeModuleName = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleName,false);
-                var forgeModuleVersion = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleVersion, false);
-                var forgeModuleDependency = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleDependency, false);
-                var forgeModuleSummary = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleSummary, false);
-                var forgeModuleDescription = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleDescription, false);
+                var forgeUserName = forgeData[Conatants.PuppetForgeUserName];
+                var forgeModuleName = forgeData[Conatants.PuppetForgeModuleName];
+                var forgeModuleVersion = forgeData[Conatants.PuppetForgeModuleVersion];
+                var forgeModuleDependency = forgeData[Conatants.PuppetForgeModuleDependency];
+                var forgeModuleSummary = forgeData[Conatants.PuppetForgeModuleSummary];
+                var forgeModuleDescription = forgeData[Conatants.PuppetForgeModuleDescription];
 
                 forgeJsonMetadata = new ForgeJsonMetadata
                 {
@@ -265,35 +272,8 @@ namespace MicrosoftOpenTech.PuppetProject
                 };
 
                 // Parse dependency
-                
-                var depNameVer = forgeModuleDependency.Replace(" ", string.Empty).Split(',');
-                if (depNameVer.Length != 2)
-                {
-                    throw new Exception("Bad Dependency format: expected: 'module','version'");
-                }
 
-                const char sq = '\'';
-                const char dq = '"';
-
-                // In case of user uses double quotes
-                var module = depNameVer[0].Replace(sq, dq);
-                // Check quotes exist
-                if (module.Length < 3 || module[0] != dq || module[module.Length - 1] != dq)
-                {
-                    throw new Exception("Bad Dependency madule format");
-                }
-
-                var version = depNameVer[1].Replace(sq, dq);
-                if (version.Length < 3 || version[0] != dq || version[version.Length - 1] != dq)
-                {
-                    throw new Exception("Bad Dependency version format");
-                }
-
-                forgeJsonMetadata.dependencies.Add(new ForgeJsonMetadata.Dependency
-                {
-                    name = module.Replace(string.Empty + dq, string.Empty), // Remove quotes
-                    version_requirement = version.Replace(string.Empty + dq, string.Empty)
-                });
+                forgeJsonMetadata.dependencies.Add(SELF.ParseDependency(forgeModuleDependency));
 
                 // Add MD5 checksums to json
 
@@ -320,10 +300,38 @@ namespace MicrosoftOpenTech.PuppetProject
             return forgeJsonMetadata;
         }
 
-        private static string TarGz(PuppetProjectNode puppetProjectNode, FilesToPack filesToPack, ForgeJsonMetadata forgeJsonMetadata)
+        internal static ForgeJsonMetadata.Dependency ParseDependency(string forgeModuleDependency)
         {
-            if (null == puppetProjectNode)
-                throw new ArgumentNullException("puppetProjectNode");
+            const char sq = '\'';
+            const char dq = '"';
+            // Remove spaces and in case of double quotes replace them with single quotes
+            var cleanDep = forgeModuleDependency.Replace(" ", string.Empty).Replace(dq, sq);
+            const string patternCom = @"^'\w+/\w+',\s*'(ge|le|g|l)?(\d+\.\d+\.(\d+|x))'$";
+            const string patternMod = @"^'\w+/\w+'";
+            const string patternVer = @"\b((ge|le|g|l))?(?(1)\s*\d+\.\d+\.\d+|\s*\d+\.\d+\.(\d+|x))\b";
+            var dep = cleanDep.Replace('<', 'l').Replace('>', 'g').Replace('=', 'e');
+            const RegexOptions opt = RegexOptions.IgnoreCase;
+
+            if (!Regex.Match(dep, patternCom, opt).Success || !Regex.Match(dep, patternVer, opt).Success)
+            {
+                throw new FormatException("Dependency format doesn't match the pattern");
+            }
+
+            return new ForgeJsonMetadata.Dependency
+            {
+                name = Regex.Match(dep, patternMod, opt).Value.Replace(string.Empty + sq, string.Empty), // Remove quotes
+                version_requirement = Regex.Match(dep, patternVer, opt).Value
+                    .Replace('l', '<')
+                    .Replace('g', '>')
+                    .Replace('e', '=')
+                    .Replace(string.Empty + sq, string.Empty)
+            };
+        }
+
+        private static string TarGz(ForgeData forgeData, FilesToPack filesToPack, ForgeJsonMetadata forgeJsonMetadata)
+        {
+            if (null == forgeData)
+                throw new ArgumentNullException("forgeData");
 
             if (null == filesToPack)
                 throw new ArgumentNullException("filesToPack");
@@ -333,85 +341,82 @@ namespace MicrosoftOpenTech.PuppetProject
 
             // Add files to a Tarball
 
-            if (filesToPack.Count > 0)
+            if (filesToPack.Count <= 0) return null;
+
+            var forgeUserName = forgeData[Conatants.PuppetForgeUserName];
+            var forgeModuleName = forgeData[Conatants.PuppetForgeModuleName];
+            var forgeModuleVersion = forgeData[Conatants.PuppetForgeModuleVersion];
+
+            // Create a temp directory.
+
+            var tmpDir = new DirectoryInfo(Path.GetTempPath());
+            var puppetTmpDir = tmpDir.CreateSubdirectory("PuppetLab");
+            var rndDir = puppetTmpDir.CreateSubdirectory(Path.GetRandomFileName());
+                
+            var moduleDirName = string.Format("{0}-{1}-{2}", forgeUserName, forgeModuleName, forgeModuleVersion).ToLower();
+            var moduleDir = rndDir.CreateSubdirectory(moduleDirName);
+                
+            Directory.SetCurrentDirectory(rndDir.ToString());
+
+            // Create json metadata file in module directory
+
+            MemoryStream ms = null;
+            FileStream fs = null;
+                
+            try
             {
-                var forgeUserName = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeUserName, false);
-                var forgeModuleName = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleName, false);
-                var forgeModuleVersion = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleVersion, false);
 
-                // Create a temp directory.
+                ms = new MemoryStream();
+                fs = File.Create(Path.Combine(moduleDir.ToString(), "metadata.json"));
 
-                var tmpDir = new DirectoryInfo(Path.GetTempPath());
-                var puppetTmpDir = tmpDir.CreateSubdirectory("PuppetLab");
-                var rndDir = puppetTmpDir.CreateSubdirectory(Path.GetRandomFileName());
-                
-                var moduleDirName = string.Format("{0}-{1}-{2}", forgeUserName, forgeModuleName, forgeModuleVersion).ToLower();
-                var moduleDir = rndDir.CreateSubdirectory(moduleDirName);
-                
-                Directory.SetCurrentDirectory(rndDir.ToString());
+                var sr = new StreamReader(ms);
+                var sw = new StreamWriter(fs);
 
-                // Create json metadata file in module directory
+                var s = new DataContractJsonSerializerSettings { UseSimpleDictionaryFormat = true };
+                var jonSerializer = new DataContractJsonSerializer(typeof(ForgeJsonMetadata), s);
 
-                MemoryStream ms = null;
-                FileStream fs = null;
-                
-                try
-                {
+                jonSerializer.WriteObject(ms, forgeJsonMetadata);
 
-                    ms = new MemoryStream();
-                    fs = File.Create(Path.Combine(moduleDir.ToString(), "metadata.json"));
+                // Remove backslashes that DataContractJsonSerializer adds before forward slashes (don't know how to disable this)
+                ms.Position = 0;
+                sw.WriteLine(sr.ReadToEnd().Replace("\\", string.Empty));
 
-                    var sr = new StreamReader(ms);
-                    var sw = new StreamWriter(fs);
+                sw.Close();
+                sr.Close();
 
-                    var s = new DataContractJsonSerializerSettings { UseSimpleDictionaryFormat = true };
-                    var jonSerializer = new DataContractJsonSerializer(typeof(ForgeJsonMetadata), s);
+                ms = null;
+                fs = null;
 
-                    jonSerializer.WriteObject(ms, forgeJsonMetadata);
-
-                    // Remove backslashes that DataContractJsonSerializer adds before forward slashes (don't know how to disable this)
-                    ms.Position = 0;
-                    sw.WriteLine(sr.ReadToEnd().Replace("\\", string.Empty));
-
-                    sw.Close();
-                    sr.Close();
-
-                    ms = null;
-                    fs = null;
-
-                }
-                finally
-                {
-                    if (ms != null) ms.Dispose();
-                    if (fs != null) fs.Dispose();
-                }
-
-                // Copy module's files to a tmp dir considering module dir tree
-
-                foreach (var fileToPack in filesToPack)
-                {
-                    var srcFileInfo = fileToPack.Item1;
-                    var relSubdir = fileToPack.Item2;
-                    if (!string.IsNullOrEmpty(relSubdir))
-                    {
-                        moduleDir.CreateSubdirectory(relSubdir);
-                    }
-                    var absSubdir = Path.Combine(moduleDir.ToString(), relSubdir);
-                    var dstFileName = Path.Combine(absSubdir, srcFileInfo.Name);
-                    srcFileInfo.CopyTo(dstFileName);
-                }
-
-                // Create a TAR GZ archive
-
-                var tarFileName = moduleDirName + ".tar";
-                var gzFileName = tarFileName + ".gz";
-
-                CreateTarGz(gzFileName, moduleDir.ToString());
-
-                return gzFileName;
+            }
+            finally
+            {
+                if (ms != null) ms.Dispose();
+                if (fs != null) fs.Dispose();
             }
 
-            return null;
+            // Copy module's files to a tmp dir considering module dir tree
+
+            foreach (var fileToPack in filesToPack)
+            {
+                var srcFileInfo = fileToPack.Item1;
+                var relSubdir = fileToPack.Item2;
+                if (!string.IsNullOrEmpty(relSubdir))
+                {
+                    moduleDir.CreateSubdirectory(relSubdir);
+                }
+                var absSubdir = Path.Combine(moduleDir.ToString(), relSubdir);
+                var dstFileName = Path.Combine(absSubdir, srcFileInfo.Name);
+                srcFileInfo.CopyTo(dstFileName);
+            }
+
+            // Create a TAR GZ archive
+
+            var tarFileName = moduleDirName + ".tar";
+            var gzFileName = tarFileName + ".gz";
+
+            CreateTarGz(gzFileName, moduleDir.ToString());
+
+            return gzFileName;
         }
 
         private static void CreateTarGz(string tgzFilename, string sourceDirectory)
@@ -593,7 +598,6 @@ namespace MicrosoftOpenTech.PuppetProject
                 {
                     var reader2 = new StreamReader(stream2);
                     var msg = reader2.ReadToEnd();
-//                    this.MessageBox(Resources.PuppetModuleUploadedSuccessfully, Resources.PuppetModuleUploadStatus);
                 }
             }
             finally
@@ -608,17 +612,24 @@ namespace MicrosoftOpenTech.PuppetProject
             }
         }
 
-        private async void UploadToPuppetForgeAsync(PuppetProjectNode puppetProjectNode, string tarballName)
+        private async void UploadToPuppetForgeAsync(ForgeData forgeData, string tarballName)
         {
+            if (null == forgeData)
+                throw new ArgumentNullException("forgeData");
+
+            if (string.IsNullOrEmpty(tarballName))
+                throw new ArgumentNullException("tarballName");
+
             var cancelationSource = new CancellationTokenSource();
             var cancelationToken = cancelationSource.Token;
             var uploadProgressWindow = new UploadProgressWindow(cancelationSource);
+
             try
             {
-                var username = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeUserName, false);
-                var forgeModuleName = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleName, false);
+                var username = forgeData[Conatants.PuppetForgeUserName];
+                var forgeModuleName = forgeData[Conatants.PuppetForgeModuleName];
                 var modulename = forgeModuleName.ToLower();
-                var moduleversion = puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleVersion, false); ;
+                var moduleversion = forgeData[Conatants.PuppetForgeModuleVersion]; ;
 
                 var forgePublishWindow = new ForgePublishWindow
                 {
@@ -659,7 +670,7 @@ namespace MicrosoftOpenTech.PuppetProject
                 uploadProgressWindow.lblStatus.Content = Resources.PuppetModuleUploadedSuccessfully;
                 uploadProgressWindow.progressBar.Value = 100;
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 Debug.WriteLine("Canceled");
                 uploadProgressWindow.lblStatus.Content = "Canceled by user.";
@@ -695,10 +706,9 @@ namespace MicrosoftOpenTech.PuppetProject
             
             uploadProgressWindow.progressBar.IsIndeterminate = false;
             uploadProgressWindow.btnCancel.Content = "Close";
-
         }
 
-        public static string ConvertToUnsecureString(SecureString securePassword)
+        private static string ConvertToUnsecureString(SecureString securePassword)
         {
             if (securePassword == null)
                 throw new ArgumentNullException("securePassword");
@@ -715,6 +725,21 @@ namespace MicrosoftOpenTech.PuppetProject
             }
         }
 
+        private static ForgeData TurnIntoDict(PuppetProjectNode puppetProjectNode)
+        {
+            var forgeData = new ForgeData
+                {
+                    { Conatants.PuppetForgeUserName, puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeUserName, false)},
+                    { Conatants.PuppetForgeModuleName, puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleName, false)},
+                    { Conatants.PuppetForgeModuleVersion, puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleVersion, false)},
+                    { Conatants.PuppetForgeModuleDependency, puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleDependency, false)},
+                    { Conatants.PuppetForgeModuleSummary, puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleSummary, false)},
+                    { Conatants.PuppetForgeModuleDescription, puppetProjectNode.ProjectMgr.GetProjectProperty(Conatants.PuppetForgeModuleDescription, false)},
+                };
+
+            return forgeData;
+        }
+
         /// <summary>
         /// This function is the callback used to execute a command when the a menu item is clicked.
         /// See the Initialize method to see how the menu item is associated to this function using
@@ -727,11 +752,11 @@ namespace MicrosoftOpenTech.PuppetProject
                 PuppetProjectNode puppetProjectNode;
                 var filesToPack = this.GetActiveProjectStruture(out puppetProjectNode);
 
-                var jsonMetadata = SELF.CreateJsonMetadata(puppetProjectNode, filesToPack);
-                var gzFileName = SELF.TarGz(puppetProjectNode, filesToPack, jsonMetadata);
-
-                this.UploadToPuppetForgeAsync(puppetProjectNode, gzFileName);
-
+                // to simplify unittesting - get rid of PuppetProjectNode and use dict instead
+                var forgeData = SELF.TurnIntoDict(puppetProjectNode);
+                var jsonMetadata = SELF.CreateJsonMetadata(forgeData, filesToPack);
+                var gzFileName = SELF.TarGz(forgeData, filesToPack, jsonMetadata);
+                this.UploadToPuppetForgeAsync(forgeData, gzFileName);
             }
             catch (Exception ex)
             {
@@ -739,6 +764,11 @@ namespace MicrosoftOpenTech.PuppetProject
             }
         }
 
+        /// <summary>
+        /// This function is the callback used to execute a command when the a menu item is clicked.
+        /// See the Initialize method to see how the menu item is associated to this function using
+        /// the OleMenuCommandService service and the MenuCommand class.
+        /// </summary>
         private void CreateTarballLocally(object sender, EventArgs e)
         {
             try
@@ -746,8 +776,10 @@ namespace MicrosoftOpenTech.PuppetProject
                 PuppetProjectNode puppetProjectNode;
                 var filesToPack = this.GetActiveProjectStruture(out puppetProjectNode);
 
-                var jsonMetadata =  SELF.CreateJsonMetadata(puppetProjectNode, filesToPack);
-                var gzFileName = SELF.TarGz(puppetProjectNode, filesToPack, jsonMetadata);
+                // to simplify unittesting - get rid of PuppetProjectNode and use dict instead
+                var forgeData = SELF.TurnIntoDict(puppetProjectNode);
+                var jsonMetadata = SELF.CreateJsonMetadata(forgeData, filesToPack);
+                var gzFileName = SELF.TarGz(forgeData, filesToPack, jsonMetadata);
 
                 var packagesDir = new DirectoryInfo(puppetProjectNode.BaseURI.Directory).CreateSubdirectory("packages");
                 var destFile = System.IO.Path.Combine(packagesDir.ToString(), gzFileName);

@@ -17,8 +17,6 @@ namespace MicrosoftOpenTech.PuppetProject
 
     public class PuppetProjectNode : ProjectNode
     {
-        private PuppetProjectPackage package;
-
         private static readonly ImageList imageList;
 
         internal static int imageIndex;
@@ -46,10 +44,8 @@ namespace MicrosoftOpenTech.PuppetProject
                 Debug.WriteLine("Can't get bitmap");
         }
 
-        public PuppetProjectNode(PuppetProjectPackage package)
+        public PuppetProjectNode()
         {
-            this.package = package;
-
             imageIndex = ImageHandler.ImageList.Images.Count;
 
             foreach (Image img in imageList.Images)

@@ -13,16 +13,16 @@ namespace MicrosoftOpenTech.PuppetProject
     [Guid(GuidList.guidPuppetProjectFactoryString)]
     class PuppetProjectFactory : ProjectFactory
     {
-        private PuppetProjectPackage package;
+        private ProjectPackage package;
 
-        public PuppetProjectFactory(PuppetProjectPackage package)
+        public PuppetProjectFactory(ProjectPackage package)
             : base(package)
         {
             this.package = package;
         }
         protected override ProjectNode CreateProject()
         {
-            PuppetProjectNode project = new PuppetProjectNode(this.package);
+            var project = new PuppetProjectNode();
 
             project.SetSite((IServiceProvider)((System.IServiceProvider)this.package).GetService(typeof(IServiceProvider)));
             return project;

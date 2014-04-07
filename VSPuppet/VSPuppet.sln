@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Project", "Templat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppetPlugin", "PuppetPlugin\PuppetPlugin.csproj", "{45EF5F90-84AE-4017-A8E6-E806876B930E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppetProject.Tests", "PuppetProject.Tests\PuppetProject.Tests.csproj", "{52816C54-1FFE-4FCE-8943-04BE3A1B1EF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{45EF5F90-84AE-4017-A8E6-E806876B930E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45EF5F90-84AE-4017-A8E6-E806876B930E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45EF5F90-84AE-4017-A8E6-E806876B930E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52816C54-1FFE-4FCE-8943-04BE3A1B1EF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52816C54-1FFE-4FCE-8943-04BE3A1B1EF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52816C54-1FFE-4FCE-8943-04BE3A1B1EF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52816C54-1FFE-4FCE-8943-04BE3A1B1EF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
