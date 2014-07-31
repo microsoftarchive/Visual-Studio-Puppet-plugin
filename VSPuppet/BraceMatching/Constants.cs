@@ -9,7 +9,9 @@ namespace BraceMatching
 
     public static class Constants
     {
-        public const string ContentType = "text";
+        public const string PuppetContentType = Puppet.Configuration.Name;
+        public const string PuppetFileExt = Puppet.Configuration.Extension;
+        public const string BaseContentType = "code";
         public const string BraceMatchingName = "puppet.braceMatchingName";
         public const string BraceMatchingDisplayName = "Puppet Brace Matching";
     }

@@ -3,7 +3,7 @@
   <TemplateData>
     <Name>Puppet Manifest</Name>
     <Description>Creates a New Puppet Manifest</Description>
-    <Icon>Template.Item.ico</Icon>
+    <Icon>puppetlabs.ico</Icon>
     <TemplateID>ee546c02-2b2a-4834-86f0-5583ea8c33a9</TemplateID>
     <ProjectType>Puppet Labs</ProjectType>
     <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>

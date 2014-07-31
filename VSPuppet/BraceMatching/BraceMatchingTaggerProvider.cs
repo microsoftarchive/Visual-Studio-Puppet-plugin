@@ -13,7 +13,7 @@ namespace BraceMatching
     using System.ComponentModel.Composition;
 
     [Export(typeof (IViewTaggerProvider))]
-    [ContentType(Constants.ContentType)]
+    [ContentType(Constants.PuppetContentType)]
     [TagType(typeof (TextMarkerTag))]
     internal class BraceMatchingTaggerProvider : IViewTaggerProvider
     {

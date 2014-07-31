@@ -4,7 +4,7 @@
     <Name>Puppet Module</Name>
     <DefaultName>PuppetModule</DefaultName>
     <Description>Creates a Puppet Module For Puppet Forge</Description>
-    <Icon>PuppetModule.ico</Icon>
+    <Icon>puppetlabs.ico</Icon>
     <ProjectType>Puppet Labs</ProjectType>
   </TemplateData>
   <TemplateContent>

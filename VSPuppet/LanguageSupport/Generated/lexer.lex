@@ -10,6 +10,7 @@
 
 %x COMMENT
 %x LN_COMMENT
+%x STR
 
 
 %{
@@ -42,19 +43,19 @@
             { "and", new TokDesc( Tokens.AND, TokenType.Keyword, string.Empty ) },
             { "or", new TokDesc( Tokens.OR, TokenType.Keyword, string.Empty ) },
             { "undef", new TokDesc( Tokens.UNDEF, TokenType.Keyword, string.Empty ) },
-            { "true", new TokDesc( Tokens.BOOLEAN, TokenType.Keyword, string.Empty ) },
-            { "false", new TokDesc( Tokens.BOOLEAN, TokenType.Keyword, string.Empty ) },
+            { "true", new TokDesc( Tokens.BOOLEAN, TokenType.Keyword, "boolean" ) },
+            { "false", new TokDesc( Tokens.BOOLEAN, TokenType.Keyword, "boolean" ) },
             { "in", new TokDesc( Tokens.IN, TokenType.Keyword, string.Empty ) },
             { "unless", new TokDesc( Tokens.UNLESS, TokenType.Keyword, string.Empty ) },
 
             { "regex", new TokDesc( Tokens.REGEX, TokenType.Literal, "regular expression" ) },
             { "/", new TokDesc( Tokens.DIV, TokenType.Operator, "divide" ) },
 
-            { "identifier", new TokDesc(Tokens.NAME, TokenType.Identifier, "identifier") },
-            { "number", new TokDesc(Tokens.NUMBER, TokenType.Literal, "number") },
-            { "string", new TokDesc(Tokens.STRING, TokenType.Literal, "string") },
-            { "variable", new TokDesc(Tokens.VARIABLE, TokenType.Identifier, "variable") }, 
-            { "classref", new TokDesc(Tokens.CLASSREF, TokenType.Identifier, "class reference") },
+            { "identifier.tokenkey.puppet.shch", new TokDesc(Tokens.NAME, TokenType.Identifier, "identifier") },
+            { "number.tokenkey.puppet.shch", new TokDesc(Tokens.NUMBER, TokenType.Literal, "number") },
+            { "string.tokenkey.puppet.shch", new TokDesc(Tokens.STRING, TokenType.Literal, "string") },
+            { "variable.tokenkey.puppet.shch", new TokDesc(Tokens.VARIABLE, TokenType.Identifier, "variable") }, 
+            { "classref.tokenkey.puppet.shch", new TokDesc(Tokens.CLASSREF, TokenType.Identifier, "class reference") },
             { "[", new TokDesc(Tokens.LBRACK, TokenType.Delimiter, string.Empty) },
             { "]", new TokDesc(Tokens.RBRACK, TokenType.Delimiter, string.Empty) },
             { "{", new TokDesc(Tokens.LBRACE, TokenType.Delimiter, string.Empty) },
@@ -98,8 +99,8 @@
             { "~>", new TokDesc(Tokens.IN_EDGE_SUB, TokenType.Operator, string.Empty) },
             { "<-", new TokDesc(Tokens.OUT_EDGE, TokenType.Operator, string.Empty) },
             { "<~", new TokDesc(Tokens.OUT_EDGE_SUB, TokenType.Operator, string.Empty) },
-            { "line.comment", new TokDesc(Tokens.LN_COMMENT, TokenType.LineComment, "line comment") },
-            { "block.comment", new TokDesc(Tokens.BL_COMMENT, TokenType.Comment, "block comment") },
+            { "line.comment.tokenkey.puppet.shch", new TokDesc(Tokens.LN_COMMENT, TokenType.LineComment, "line comment") },
+            { "block.comment.tokenkey.puppet.shch", new TokDesc(Tokens.BL_COMMENT, TokenType.Comment, "block comment") },
         };
 
         private int GetTokenId(string value)
@@ -192,10 +193,6 @@ CmntStart               \/\*
 CmntEnd                 \*\/
 ABStar                  [^\*\n]*
 
-DQSStart                \"
-DQNewLine               [^\n]*
-DQSEnd                  \"
-
 ClassRef                ((::)?[A-Z][A-Za-z0-9_]*)+
 Name                    ((::)?[a-z][A-Za-z0-9_]*)(::[a-z][A-Za-z0-9_]*)*
 
@@ -203,17 +200,19 @@ DollarVar               \$(::)?([A-Za-z0-9_]+::)*[A-Za-z0-9_]+
 Number                  (0[xX][0-9A-Fa-f]+|0?[0-9]+(\.[0-9]+)?([eE]-?[0-9]+)?)
 
 Regex                   \/[^\*](\\.|[^\\/])*\/
-DQString                \"(\\.|[^\\"\n])*\"
-SQString                \'(\\.|[^\\\'\n])*\'
+SQString                \'(\\.|[^'\n])*\'
+DQString                \"(\\.|[^"\n])*\"
+DQStrBody               (\\.|[^\n"])*
+
 
 
 %%
 
-{Number}                    { return GetTokenId("number"); }
-{DQString}                  { return GetTokenId("string"); }
-{SQString}                  { return GetTokenId("string"); }
-{DollarVar}                 { return GetTokenId("variable"); }
-{ClassRef}                  { return GetTokenId("classref"); }
+{Number}                    { return GetTokenId("number.tokenkey.puppet.shch"); }
+{SQString}                  { return GetTokenId("string.tokenkey.puppet.shch"); }
+{DQString}                  { return GetTokenId("string.tokenkey.puppet.shch"); }
+{DollarVar}                 { return GetTokenId("variable.tokenkey.puppet.shch"); }
+{ClassRef}                  { return GetTokenId("classref.tokenkey.puppet.shch"); }
 {Name}                      { return GetKeywordOrName(yytext); }
 "["                         { return GetTokenId(yytext); }
 "]"                         { return GetTokenId(yytext); }
@@ -260,17 +259,20 @@ SQString                \'(\\.|[^\\\'\n])*\'
 \<\-                        { return GetTokenId(yytext); }
 \<\~                        { return GetTokenId(yytext); }
 
-#                                           { BEGIN(LN_COMMENT); return GetTokenId("line.comment"); }
+#                                           { BEGIN(LN_COMMENT); return GetTokenId("line.comment.tokenkey.puppet.shch"); }
 <LN_COMMENT>\n                              { BEGIN (INITIAL); }
-<LN_COMMENT>(\\.|[^\n])*                    { return GetTokenId("line.comment"); }
+<LN_COMMENT>(\\.|[^\n])*                    { return GetTokenId("line.comment.tokenkey.puppet.shch"); }
 
 
-{CmntStart}{ABStar}\**{CmntEnd}             { return GetTokenId("block.comment"); } 
-{CmntStart}{ABStar}\**                      { BEGIN(COMMENT); return GetTokenId("block.comment"); }
+{CmntStart}{ABStar}\**{CmntEnd}             { return GetTokenId("block.comment.tokenkey.puppet.shch"); } 
+{CmntStart}{ABStar}\**                      { BEGIN(COMMENT); return GetTokenId("block.comment.tokenkey.puppet.shch"); }
 <COMMENT>\n                                 |
-<COMMENT>{ABStar}\**                        { return GetTokenId("block.comment"); }
-<COMMENT>{ABStar}\**{CmntEnd}               { BEGIN(INITIAL); return GetTokenId("block.comment"); }
+<COMMENT>{ABStar}\**                        { return GetTokenId("block.comment.tokenkey.puppet.shch"); }
+<COMMENT>{ABStar}\**{CmntEnd}               { BEGIN(INITIAL); return GetTokenId("block.comment.tokenkey.puppet.shch"); }
 
+["]{DQStrBody}\n?                          { BEGIN(STR); return GetTokenId("string.tokenkey.puppet.shch"); }
+<STR>{DQStrBody}["]                        { BEGIN(INITIAL); return GetTokenId("string.tokenkey.puppet.shch");  }
+<STR>{DQStrBody}\n                         { return GetTokenId("string.tokenkey.puppet.shch"); }
 
 {White0}+                        { return (int)Tokens.LEX_WHITE; }
 \n                               { return (int)Tokens.LEX_WHITE; }

@@ -14,12 +14,13 @@ namespace BraceMatching
     [Export(typeof(EditorFormatDefinition))]
     [Name(Constants.BraceMatchingName)]
     [UserVisible(true)]
+    [Order(After = Priority.Default, Before = Priority.High)] 
     class HighlightWordFormatDefinition : MarkerFormatDefinition
     {
         public HighlightWordFormatDefinition()
         {
-            this.BackgroundColor = Colors.LightBlue;
-            this.ForegroundColor = Colors.DarkBlue;
+//            this.BackgroundColor = Colors.Brown;
+            this.ForegroundColor = Colors.DarkCyan;
             this.DisplayName = Constants.BraceMatchingDisplayName;
             this.ZOrder = 5;
         }

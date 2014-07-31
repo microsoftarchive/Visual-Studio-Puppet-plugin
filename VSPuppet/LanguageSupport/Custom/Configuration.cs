@@ -13,6 +13,7 @@ namespace Puppet
 
         public const string Name = "Puppet Language";
         public const string Extension = ".pp";
+        public const string ServiceName = "VS Puppet Language Support";
 
         static readonly CommentInfo puppetCommentInfo;
         public static CommentInfo PuppetCommentInfo { get { return Configuration.puppetCommentInfo; } }

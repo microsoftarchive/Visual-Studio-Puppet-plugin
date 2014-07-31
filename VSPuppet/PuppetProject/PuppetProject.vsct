@@ -60,10 +60,10 @@
               <CommandFlag>DefaultInvisible</CommandFlag>
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
-
       <Button guid="guidPuppetProjectCmdSet" id="cmdidCreatePuppetForgeModule" priority="0x0100" type="Button">
         <Parent guid="guidPuppetProjectCmdSet" id="PuppetModuleMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>Create a Tarball and Save Locally</ButtonText>
         </Strings>
@@ -72,6 +72,7 @@
       <Button guid="guidPuppetProjectCmdSet" id="cmdidUploadPuppetForgeModule" priority="0x0100" type="Button">
         <Parent guid="guidPuppetProjectCmdSet" id="PuppetModuleMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>Create a Tarball and Upload to the Puppet Forge</ButtonText>
         </Strings>

@@ -18,6 +18,7 @@ namespace HighlightWord
     {
         public HighlightWordFormatDefinition()
         {
+            this.ForegroundColor = Colors.OrangeRed;
             this.BackgroundColor = Colors.Beige;
             this.DisplayName = Constants.HighlightWordDisplayName;
             this.ZOrder = 5;

@@ -12,7 +12,7 @@ namespace Puppet
 
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [PackageRegistration(UseManagedResourcesOnly=true)]
-    [ProvideService(typeof(PuppetLanguageService), ServiceName = "VS Puppet Language Support")]
+    [ProvideService(typeof(PuppetLanguageService), ServiceName = Configuration.ServiceName)]
     [ProvideLanguageExtension(typeof(PuppetLanguageService), Configuration.Extension)]
     [ProvideLanguageService(typeof(PuppetLanguageService), 
         Configuration.Name, 

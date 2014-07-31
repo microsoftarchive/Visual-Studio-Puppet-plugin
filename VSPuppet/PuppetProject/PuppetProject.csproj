@@ -169,7 +169,7 @@
     <None Include="Resources\Images.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Package.ico" />
+    <Resource Include="Resources\Package.ico" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>

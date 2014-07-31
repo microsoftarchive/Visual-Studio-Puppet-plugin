@@ -132,12 +132,14 @@ namespace MicrosoftOpenTech.PuppetProject
             {
                 // Create the command for the menu item.
                 var menuCommandIdUpload = new CommandID(GuidList.guidPuppetProjectCmdSet, (int)PkgCmdIDList.cmdidUploadPuppetForgeModule);
-                var menuItemUpload = new MenuCommand(this.CreateTarballAndUploadToPuppetForge, menuCommandIdUpload);
-                mcs.AddCommand(menuItemUpload);
+                var menuItemForge = new OleMenuCommand(this.CreateTarballAndUploadToPuppetForge, menuCommandIdUpload);
+                menuItemForge.BeforeQueryStatus += new EventHandler(OnBeforeMenyQueryStatus);
+                mcs.AddCommand(menuItemForge);
 
                 var menuCommandIdCreate = new CommandID(GuidList.guidPuppetProjectCmdSet, (int)PkgCmdIDList.cmdidCreatePuppetForgeModule);
-                var menuItemCreate = new MenuCommand(this.CreateTarballLocally, menuCommandIdCreate);
-                mcs.AddCommand(menuItemCreate);
+                var menuItemLocal = new OleMenuCommand(this.CreateTarballLocally, menuCommandIdCreate);
+                menuItemLocal.BeforeQueryStatus += new EventHandler(OnBeforeMenyQueryStatus);
+                mcs.AddCommand(menuItemLocal);
 
                 // Create the command for the tool window
                 var toolwndCommandId = new CommandID(GuidList.guidPuppetProjectCmdSet, (int)PkgCmdIDList.cmdidPuppetForgeWindow);
@@ -153,13 +155,49 @@ namespace MicrosoftOpenTech.PuppetProject
                     || ErrorHandler.Failed(outputWindow.GetPane(guidGeneral, out pane))
                     || pane == null)
                 {
-                throw new NotSupportedException(Resources.CanNotCreateWindow);
-               }
+                    throw new NotSupportedException(Resources.CanNotCreateWindow);
+                }
 
                 pane.Activate();
                 OutputWindow = pane;
             }
         }
+
+        private bool IsPuppetModule()
+        {
+            var projects = this.DteService.ActiveSolutionProjects as Array;
+
+            if (null == projects || projects.Length <= 0)
+            {
+                return false;
+            }
+
+            var project = projects.GetValue(0) as OAProject;
+
+            if (project == null)
+            {
+                return false;
+            }
+
+            var puppetProjectNode = project.Project as PuppetProjectNode;
+
+            if (null == puppetProjectNode)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void OnBeforeMenyQueryStatus(object sender, EventArgs e)
+        {
+            var command = sender as OleMenuCommand;
+            if (null != command && !this.IsPuppetModule())
+            {
+                command.Visible = false;
+            }
+        }
+
         #endregion
 
         internal FilesToPack GetActiveProjectStruture(out PuppetProjectNode puppetProjectNode)

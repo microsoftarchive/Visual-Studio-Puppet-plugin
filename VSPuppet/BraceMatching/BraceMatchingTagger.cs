@@ -56,8 +56,7 @@ namespace BraceMatching
 
             var tempEvent = TagsChanged;
             if (tempEvent != null)
-                tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(SourceBuffer.CurrentSnapshot, 0,
-                    SourceBuffer.CurrentSnapshot.Length)));
+                tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(SourceBuffer.CurrentSnapshot, 0, SourceBuffer.CurrentSnapshot.Length)));
         }
 
         public IEnumerable<ITagSpan<BraceMatchingTag>> GetTags(NormalizedSnapshotSpanCollection spans)
@@ -66,7 +65,9 @@ namespace BraceMatching
                 yield break;
 
             //don't do anything if the current SnapshotPoint is not initialized or at the end of the buffer 
-            if (!CurrentChar.HasValue || CurrentChar.Value.Position >= CurrentChar.Value.Snapshot.Length)
+            if (!CurrentChar.HasValue 
+                || CurrentChar.Value.Position >= CurrentChar.Value.Snapshot.Length 
+                || CurrentChar.Value.Position >= SourceBuffer.CurrentSnapshot.Length)
                 yield break;
 
             //hold on to a snapshot of the current character
@@ -78,7 +79,8 @@ namespace BraceMatching
                 currentChar = currentChar.TranslateTo(spans[0].Snapshot, PointTrackingMode.Positive);
             }
 
-            //get the current char and the previous char 
+            //get the current char and the previous char
+ 
             char currentText = currentChar.GetChar();
             SnapshotPoint lastChar = currentChar == 0 ? currentChar : currentChar - 1; //if currentChar is 0 (beginning of buffer), don't move it back 
             char lastText = lastChar.GetChar();
@@ -88,7 +90,7 @@ namespace BraceMatching
             {
                 char closeChar;
                 m_braceList.TryGetValue(currentText, out closeChar);
-                if (BraceMatchingTagger.FindMatchingCloseChar(currentChar, currentText, closeChar, View.TextViewLines.Count, out pairSpan) == true)
+                if (BraceMatchingTagger.FindMatchingCloseChar(currentChar, currentText, closeChar, SourceBuffer.CurrentSnapshot.LineCount, out pairSpan) == true)
                 {
                     yield return new TagSpan<BraceMatchingTag>(new SnapshotSpan(currentChar, 1), new BraceMatchingTag());
                     yield return new TagSpan<BraceMatchingTag>(pairSpan, new BraceMatchingTag());
@@ -99,7 +101,7 @@ namespace BraceMatching
                 var open = from n in m_braceList
                            where n.Value.Equals(lastText)
                            select n.Key;
-                if (BraceMatchingTagger.FindMatchingOpenChar(lastChar, (char)open.ElementAt<char>(0), lastText, View.TextViewLines.Count, out pairSpan) == true)
+                if (BraceMatchingTagger.FindMatchingOpenChar(lastChar, (char)open.ElementAt<char>(0), lastText, SourceBuffer.CurrentSnapshot.LineCount, out pairSpan) == true)
                 {
                     yield return new TagSpan<BraceMatchingTag>(new SnapshotSpan(lastChar, 1), new BraceMatchingTag());
                     yield return new TagSpan<BraceMatchingTag>(pairSpan, new BraceMatchingTag());
@@ -113,6 +115,7 @@ namespace BraceMatching
             ITextSnapshotLine line = startPoint.GetContainingLine();
             string lineText = line.GetText();
             int lineNumber = line.LineNumber;
+
             int offset = startPoint.Position - line.Start.Position + 1;
 
             int stopLineNumber = startPoint.Snapshot.LineCount - 1;
@@ -164,11 +167,14 @@ namespace BraceMatching
             ITextSnapshotLine line = startPoint.GetContainingLine();
 
             int lineNumber = line.LineNumber;
+            
+
             int offset = startPoint - line.Start - 1; //move the offset to the character before this one 
 
             //if the offset is negative, move to the previous line 
             if (offset < 0)
             {
+                if(lineNumber == 0) return false;
                 line = line.Snapshot.GetLineFromLineNumber(--lineNumber);
                 offset = line.Length - 1;
             }
